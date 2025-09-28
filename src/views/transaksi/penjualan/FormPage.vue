@@ -223,7 +223,7 @@
               </u-grid>
               <u-col flex1 class="w-full" gap="gap-0">
                 <template v-for="(item, index) in store.barangSelected?.stok" :key="item?.id">
-                  <u-row flex1 class="w-full bg-secondary"gap="gap-2" padding="px-2 py-3">
+                  <u-row flex1 class="w-full bg-secondary" gap="gap-2" padding="px-2 py-3">
                     <u-row flex1 class="w-full items-start">
                       <u-text class="italic" label="Expired di : " />
                       <div>
@@ -554,10 +554,10 @@ const handleAdd = async(item) => {
 
 function getHargaJual() {
   const selected = props?.store?.barangSelected ?? null
-  const resep = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_resep ?? 0) / 100)
-  const biasa = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_biasa ?? 0) / 100)
-  // return form.value.kode_dokter ? parseInt(selected?.harga_jual_resep_k ?? 0) : parseInt(selected?.harga_jual_biasa_k ?? 0)
-  return form.value.kode_dokter ? Math.ceil(resep) : Math.ceil(biasa)
+  // const resep = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_resep ?? 0) / 100)
+  // const biasa = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_biasa ?? 0) / 100)
+  return form.value.kode_dokter ? parseInt(selected?.harga_jual_resep_k ?? 0) : parseInt(selected?.harga_jual_biasa_k ?? 0)
+  // return form.value.kode_dokter ? Math.ceil(resep) : Math.ceil(biasa)
 }
 
 const handleSelectedPelanggan = (item) => {
