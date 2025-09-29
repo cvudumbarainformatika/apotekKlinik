@@ -455,26 +455,23 @@ const handleKunci = async (e) => {
     //   resp = await api.post(`api/v1/transactions/returpembelian/unlock-order`, payload)
     // }
     resp = await api.post(`api/v1/transactions/returpenjualan/lock-retur-penjualan`, payload)
-    console.log('resp', resp);
+    // console.log('resp', resp);
+    notify({ message: resp?.data?.message, type: 'success' })
   } catch (error) {
     console.log('error', error);
     notify({
       type: 'error',
-      message: error?.response?.data?.message
+      message: error?.message
     })
     
   } finally {
     loadingLock.value = false
   }
   
-
   const data = resp?.data?.data
   props.store.form.flag = data?.flag
   props.store.initModeEdit(data)
 
-  
-
-  
 }
 
 const totalRetur = computed(() => {

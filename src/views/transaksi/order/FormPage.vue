@@ -147,7 +147,7 @@
           <u-row>
             <u-empty v-if="!store.form?.order_records?.length" title="Belum Ada Items" icon="baggage-claim" />
             <u-list v-else :spaced="true" anim :items="store.form?.order_records">
-              <template #item="{ item, index, isHovered }">
+              <template #item="{ item, isHovered }">
                 <ListRincian :item="item" :store="store" :is-hovered="isHovered" />
               </template>
             </u-list>
@@ -347,12 +347,12 @@ const handleKunci = async (e) => {
     } else {
       resp = await api.post(`api/v1/transactions/order/unlock-order`, payload)
     }
-
+    notify({ message: resp?.data?.message, type: 'success' })
     // console.log('resp', resp);
-    return
+    // return
   } catch (error) {
     console.log('error', error);
-    notify({ message: error?.response?.data?.message ?? 'Kunci tidak bisa dibuka', type: 'error' })
+    notify({ message: error?.message ?? 'Kunci tidak bisa dibuka', type: 'error' })
     return
   } finally {
     loadingLock.value = false

@@ -417,20 +417,24 @@ const handleKunci = async (e) => {
   try {
     if (!flag) {
       resp = await api.post(`api/v1/transactions/penerimaan/lock_penerimaan`, payload)
-      props.store.initModeEdit(data)
+      
     } 
-
-    console.log('resp', resp);
+    if (resp.data.success === true) {
+      notify({ message: resp?.data?.message, type: 'success' })
+    }
+    // console.log('resp', resp);
+    // return
   } catch (error) {
     console.log('error', error);
-
+    notify({ message: error?.message ?? 'Kunci tidak bisa dibuka', type: 'error' })
+    return
   } finally {
     loadingLock.value = false
   }
 
   const data = resp?.data?.data
   props.store.form.flag = data?.flag
-  
+  props.store.initModeEdit(data)
 
 }
 
