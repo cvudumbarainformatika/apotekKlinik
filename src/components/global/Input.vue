@@ -116,7 +116,7 @@ defineExpose({ inputRef })
         error ? 'border-danger focus:border-danger focus:ring-danger text-danger' 
           : login ? 'border-secondary focus:border-background focus:ring-background text-background'
             : 'border-light-primary focus:border-primary focus:ring-primary text-primary focus:bg-background',
-        hasValue ? !login ? 'bg-background' : 'bg-gray-600' : 'bg-transparent',
+  hasValue ? !login ? 'bg-background' : 'bg-primary' : 'bg-transparent',
 
         // ✅ tambahan kondisi readonly & disable
         readonly ? 'border-dashed border-primary/50  cursor-default' : '',

@@ -4,7 +4,7 @@
 const colors = {
   primary: '#3b352f',
   lightPrimary: '#ab9329',
-  secondary: '#fbffdf',
+  secondary: '#fdfff3',
   background: '#ffffff',
   dark: '#181818',
   danger: '#E9053E',
