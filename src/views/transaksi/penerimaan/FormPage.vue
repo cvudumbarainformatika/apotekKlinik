@@ -109,7 +109,7 @@
           <u-icon name="baggage-claim" class="w-4 h-4" />
           <u-text class="font-bold">Informasi Item</u-text>
         </u-row>
-        <u-row v-if="store.orderSelected && form.jenispajak">
+        <u-row v-if="store.orderSelected && form.hutang">
           <u-list :items="listItems">
             <template #item="{ item }">
               <u-view flex1 class="w-full" padding="px-3 py-3">
