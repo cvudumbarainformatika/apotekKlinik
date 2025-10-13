@@ -80,6 +80,7 @@ const props = defineProps({
 })
 const ModalDetail = defineAsyncComponent(() => import('./ModalDetail.vue'))
 const openModalDetail = ref(false)
+const loadingOpen = ref(false)
 onMounted(() => {
 
   // if (props.range) {
@@ -103,7 +104,7 @@ onMounted(() => {
 // }
 
 const openDetail = async () => {
-  props.store.loading = true
+  loadingOpen.value = true
   try {
     const params = {
       bulan: props.store.range.start_date,
@@ -120,15 +121,15 @@ const openDetail = async () => {
   } catch (error) {
     console.error('Error fetching Kartu Stok:', error)
   } finally {
-    props.store.loading = false
+    loadingOpen.value = false
   }
   openModalDetail.value = true
-
+  loadingOpen.value = false
 }
 
 const handleCloseModalNota = () => {
   openModalDetail.value = false
-
+  loadingOpen.value = false
 }
 
 // saldo awal
