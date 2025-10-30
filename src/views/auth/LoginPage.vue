@@ -12,7 +12,7 @@
       <!-- Logo di luar mask -->
       <div
         class="absolute z-10 -top-5 left-1/2 -translate-x-1/2 w-20 h-20 rounded-full border-1 border-primary flex items-center justify-center">
-        <img src="/images/logo.svg" alt="Logo" class="w-full h-full" />
+        <img src="/images/logo.png" alt="Logo" class="w-full h-full" />
       </div>
       <div class="relative flex flex-col items-center justify-center w-full h-full gap-2 p-4">
         <img src="/images/box-login.svg" alt="Login" class="w-full h-full absolute top-0 left-0" />
