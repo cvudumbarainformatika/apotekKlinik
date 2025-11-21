@@ -8,12 +8,12 @@
           <u-icon name="layers" class="w-4 h-4" />
           <u-text class="font-bold">Informasi Penjualan</u-text>
         </u-row>
-        <u-row >
-          <div 
+        <u-row>
+          <div
             class="bg-primary/10 border border-primary rounded-xl shadow-sm p-2 transition-all duration-300 hover:shadow-md w-full">
             <div class="flex flex-1 justify-between items-start">
               <u-row flex1 class="w-full">
-                <u-avatar icon="users" size="w-10 h-10" ></u-avatar>
+                <u-avatar icon="users" size="w-10 h-10"></u-avatar>
                 <u-col gap="gap-0">
                   <u-text class="font-bold">
                     Petugas Saat ini
@@ -23,11 +23,11 @@
                   </u-text>
                 </u-col>
               </u-row>
-             
+
             </div>
           </div>
         </u-row>
-        <u-row >
+        <u-row>
           <!-- <div 
             class="bg-primary/10 border border-primary rounded-xl shadow-sm p-2 transition-all duration-300 hover:shadow-md w-full">
             <div class="flex flex-1 justify-center items-center">
@@ -40,17 +40,17 @@
             class="inline-flex rounded-lg overflow-hidden border border-light-primary bg-grady-primary w-full justify-center">
             <u-grid cols="2" gap="gap-0">
               <label
-              :class="['text-sm w-full font-medium text-center px-4 py-2 select-none transition-colors', jenis === 'umum' ? 'bg-grady-primary text-background ' : 'bg-secondary text-primary font-semibold shadow']">
-              Umum
-            </label>
-            <label
-              :class="['text-sm w-full font-medium text-center px-2 py-2 select-none transition-colors', jenis === 'resep' ? 'bg-grady-primary text-background ' : 'bg-secondary text-primary font-semibold shadow']">
-              Resep
-            </label>
+                :class="['text-sm w-full font-medium text-center px-4 py-2 select-none transition-colors', jenis === 'umum' ? 'bg-grady-primary text-background ' : 'bg-secondary text-primary font-semibold shadow']">
+                Umum
+              </label>
+              <label
+                :class="['text-sm w-full font-medium text-center px-2 py-2 select-none transition-colors', jenis === 'resep' ? 'bg-grady-primary text-background ' : 'bg-secondary text-primary font-semibold shadow']">
+                Resep
+              </label>
             </u-grid>
           </div>
         </u-row>
-        
+
       </u-card>
 
       <!-- HEADER 2 -->
@@ -60,7 +60,7 @@
           <u-text class="font-bold">Data Pelanggan</u-text>
         </u-row>
         <u-row>
-          <u-autocomplete v-model="searchPelanggan" placeholder="Cari Pelanggan" 
+          <!-- <u-autocomplete v-model="searchPelanggan" placeholder="Cari Pelanggan" 
             :debounce="300" :min-search-length="2" 
             item-key="id" 
             item-label="nama"
@@ -69,7 +69,12 @@
             :show-add-button="false"
             api-url="/api/v1/master/pelanggan/get-list" api-response-path="data.data" :api-params="{ per_page: 5 }"
             :use-api="true" @select="handleSelectedPelanggan"
-          ></u-autocomplete>
+          ></u-autocomplete> -->
+          <u-autocomplete ref="searchPelangganRef" v-model="searchPelanggan" placeholder="Cari Pelanggan"
+            :debounce="300" :min-search-length="2" item-key="id" item-label="nama"
+            not-found-text="Data Pelanggan tidak ditemukan" not-found-subtext="Coba kata kunci lain"
+            :show-add-button="false" api-url="/api/v1/master/pelanggan/get-list" api-response-path="data.data"
+            :api-params="{ per_page: 5 }" :use-api="true" @select="handleSelectedPelanggan"></u-autocomplete>
         </u-row>
         <u-row>
           <div v-if="store?.pelangganSelected"
@@ -81,8 +86,7 @@
                   {{ store.pelangganSelected?.nama }}
                 </u-text>
               </u-row>
-              <button @click="clearSelectedPelanggan"
-                class="text-primary hover:text-danger " aria-label="Hapus">
+              <button @click="clearSelectedPelanggan" class="text-primary hover:text-danger " aria-label="Hapus">
                 <u-icon name="X" class="w-4 h-4" />
               </button>
             </div>
@@ -100,7 +104,7 @@
               </div>
             </u-row>
           </div>
-          
+
         </u-row>
       </u-card>
       <!-- HEADER 3 -->
@@ -110,16 +114,11 @@
           <u-text class="font-bold">Data Dokter</u-text>
         </u-row>
         <u-row>
-          <u-autocomplete v-model="searchDokter" placeholder="Cari Dokter" 
-            :debounce="300" :min-search-length="2" 
-            item-key="id" 
-            item-label="nama_dokter"
-            not-found-text="Data Dokter tidak ditemukan" 
-            not-found-subtext="Coba kata kunci lain" 
-            :show-add-button="false"
-            api-url="/api/v1/master/dokter/get-list" api-response-path="data.data" :api-params="{ per_page: 5 }"
-            :use-api="true" @select="handleSelectedDokter"
-          ></u-autocomplete>
+          <u-autocomplete ref="searchDokterRef" v-model="searchDokter" placeholder="Cari Dokter" :debounce="300"
+            :min-search-length="2" item-key="id" item-label="nama" not-found-text="Data Dokter tidak ditemukan"
+            not-found-subtext="Coba kata kunci lain" :show-add-button="false" api-url="/api/v1/master/dokter/get-list"
+            api-response-path="data.data" :api-params="{ per_page: 5 }" :use-api="true"
+            @select="handleSelectedDokter"></u-autocomplete>
         </u-row>
         <u-row>
           <div v-if="store?.dokterSelected"
@@ -131,8 +130,7 @@
                   {{ store.dokterSelected?.nama_dokter }}
                 </u-text>
               </u-row>
-              <button @click="clearSelectedDokter"
-                class="text-primary hover:text-danger " aria-label="Hapus">
+              <button @click="clearSelectedDokter" class="text-primary hover:text-danger " aria-label="Hapus">
                 <u-icon name="X" class="w-4 h-4" />
               </button>
             </div>
@@ -150,187 +148,185 @@
               </div>
             </u-row>
           </div>
-          
+
         </u-row>
       </u-card>
 
-      
-      
+
+
     </u-grid>
-  
+
     <!-- CONTENT -->
     <u-grid cols="12">
 
       <!-- List Items -->
-        <u-card class="col-span-8 h-full space-y-4">
-          <u-row>
-            <u-icon name="baggage-claim" class="w-4 h-4" />
-            <u-text class="font-bold">Informasi Item</u-text>
-          </u-row>
-          <u-row>
-            <u-autocomplete v-model="searchBarang" placeholder="Cari Barang" 
-              :debounce="300" :min-search-length="2" 
-              item-key="id" 
-              item-label="nama"
-              not-found-text="Data Barang tidak ditemukan" 
-              not-found-subtext="Coba kata kunci lain" 
-              :show-add-button="false"
-              api-url="/api/v1/transactions/penjualan/get-list-obat" api-response-path="data.data" :api-params="{ per_page: 5 }"
-              :use-api="true" @select="handleSelectedBarang" 
-            >
-              <template #item="{ item }">
+      <u-card class="col-span-8 h-full space-y-4">
+        <u-row>
+          <u-icon name="baggage-claim" class="w-4 h-4" />
+          <u-text class="font-bold">Informasi Item</u-text>
+        </u-row>
+        <u-row>
+          <u-autocomplete ref="searchBarangRef" v-model="searchBarang" placeholder="Cari Barang" :debounce="300"
+            :min-search-length="2" item-key="id" item-label="nama" not-found-text="Data Barang tidak ditemukan"
+            not-found-subtext="Coba kata kunci lain" :show-add-button="false"
+            api-url="/api/v1/transactions/penjualan/get-list-obat" api-response-path="data.data"
+            :api-params="{ per_page: 5 }" :use-api="true" @select="handleSelectedBarang">
+            <template #item="{ item }">
 
-                <u-row flex1 class="w-full" gap="gap-2">
-                  <u-row flex1 class="w-full">
-                    <u-col gap="gap-1">
-                      <u-text size="sm" class="font-medium">{{ item?.nama }}</u-text>
-                      <u-row class="-mt-1" gap="gap-1">
-                        <u-text class="">{{ item?.kode }}</u-text>
-                      </u-row>
-                    </u-col>
-                  </u-row>
-                  <u-row>
-                    <u-col align="items-end" gap="gap-1">
-                      <u-text class="-mb-1">Total Stok</u-text>
-                      <u-text size="lg" class="font-medium">
-                        {{ lihatStokAll(item) }}
-                      </u-text>
-                    </u-col>
-                  </u-row>
+              <u-row flex1 class="w-full" gap="gap-2">
+                <u-row flex1 class="w-full">
+                  <u-col gap="gap-1">
+                    <u-text size="sm" class="font-medium">{{ item?.nama }}</u-text>
+                    <u-row class="-mt-1" gap="gap-1">
+                      <u-text class="">{{ item?.kode }}</u-text>
+                    </u-row>
+                  </u-col>
                 </u-row>
+                <u-row>
+                  <u-col align="items-end" gap="gap-1">
+                    <u-text class="-mb-1">Total Stok</u-text>
+                    <u-text size="lg" class="font-medium">
+                      {{ lihatStokAll(item) }}
+                    </u-text>
+                  </u-col>
+                </u-row>
+              </u-row>
 
-                
-              </template>
-            </u-autocomplete>
-          </u-row>
 
-          <u-row class="relative -mt-4">
-            <div v-if="store?.barangSelected"
-              ref="menuBarangRef"
-              class="bg-background border-1 border-primary rounded-xl shadow-sm p-4 transition-all duration-300 hover:shadow-md w-full absolute z-10 -top-4">
-              <u-grid cols="12" gap="gap-4">
-                <div class="col-span-6">
-                  <u-text class="font-medium" size="md">{{ store.barangSelected?.nama }}</u-text>
-                </div>
+            </template>
+          </u-autocomplete>
+        </u-row>
 
-                <div class="col-span-6 flex items-center justify-end gap-2">
-                  <u-text>Total Stok : </u-text> <u-text class="font-bold" size="lg">  {{ lihatStokAll(store.barangSelected) }}</u-text>
-                </div>
+        <u-row class="relative -mt-4">
+          <div v-if="store?.barangSelected" ref="menuBarangRef"
+            class="bg-background border-1 border-primary rounded-xl shadow-sm p-4 transition-all duration-300 hover:shadow-md w-full absolute z-10 -top-4">
+            <u-grid cols="12" gap="gap-4">
+              <div class="col-span-6">
+                <u-text class="font-medium" size="md">{{ store.barangSelected?.nama }}</u-text>
+              </div>
 
-                <!-- <div class="col-span-12">
+              <div class="col-span-6 flex items-center justify-end gap-2">
+                <u-text>Total Stok : </u-text> <u-text class="font-bold" size="lg"> {{
+                  lihatStokAll(store.barangSelected) }}</u-text>
+              </div>
+
+              <!-- <div class="col-span-12">
                   <u-separator spacing="-my-2"></u-separator>
                 </div> -->
-              </u-grid>
-              <u-col flex1 class="w-full" gap="gap-0">
-                <template v-for="(item) in store.barangSelected?.stok" :key="item?.id">
-                  <u-row flex1 class="w-full bg-secondary" gap="gap-2" padding="px-2 py-3">
-                    <u-row flex1 class="w-full items-start">
-                      <u-text class="italic" label="Expired di : " />
-                      <div>
-                        <u-text class="font-medium italic">
-                          {{ item?.tgl_exprd }}
-                        </u-text>
-                        <u-text color="text-gray-500 italic">
-                          {{ formatWaktuSisa(item?.tgl_exprd) }}
-                        </u-text>
-                      </div>
-                    </u-row>
-                    <u-row gap="gap-3">
-                      <div class="flex flex-col">
-                        <div class="text-right">
-                          <div>
-                            <div class="text-xs">Harga : <b class="font-bold text-sm">Rp. {{ formatRupiah(getHargaJual()) }} </b></div>
-                          </div>
-                          <div>
-                            <div class="text-xs">Sisa Stok : <b class="font-bold text-md">{{  item?.jumlah_k }}</b></div>
-                          </div>
+            </u-grid>
+            <u-col flex1 class="w-full" gap="gap-0">
+              <template v-for="(item) in store.barangSelected?.stok" :key="item?.id">
+                <u-row flex1 class="w-full bg-secondary" gap="gap-2" padding="px-2 py-3">
+                  <u-row flex1 class="w-full items-start">
+                    <u-text class="italic" label="Expired di : " />
+                    <div>
+                      <u-text class="font-medium italic">
+                        {{ item?.tgl_exprd }}
+                      </u-text>
+                      <u-text color="text-gray-500 italic">
+                        {{ formatWaktuSisa(item?.tgl_exprd) }}
+                      </u-text>
+                    </div>
+                  </u-row>
+                  <u-row gap="gap-3">
+                    <div class="flex flex-col">
+                      <div class="text-right">
+                        <div>
+                          <div class="text-xs">Harga : <b class="font-bold text-sm">Rp. {{ formatRupiah(getHargaJual())
+                              }} </b></div>
+                        </div>
+                        <div>
+                          <div class="text-xs">Sisa Stok : <b class="font-bold text-md">{{ item?.jumlah_k }}</b></div>
                         </div>
                       </div>
-                      <div class="w-20" :class="{ 'animate-shake': parseInt(item?.jumlah) > parseInt(item?.jumlah_k) }">
-                        <u-input type="number" v-model.number="item.jumlah" label="Jumlah" @focus="handleFocusJumlah" 
-                          :error="parseInt(item?.jumlah) > parseInt(item?.jumlah_k)"
-                        />
-                      </div>
+                    </div>
+                    <div class="w-20" :class="{ 'animate-shake': parseInt(item?.jumlah) > parseInt(item?.jumlah_k) }">
+                      <u-input type="number" v-model.number="item.jumlah" label="Jumlah" @focus="handleFocusJumlah"
+                        :error="parseInt(item?.jumlah) > parseInt(item?.jumlah_k)" />
 
-                      <u-btn :disabled="(parseInt(item?.jumlah) > parseInt(item?.jumlah_k)) || parseInt(item?.jumlah) === 0" 
-                        :loading="store.loadingSave"
-                        variant="secondary" size="sm" @click.stop="handleAdd(item)">Add</u-btn>
-                    </u-row>
+                    </div>
+
+                    <u-btn
+                      :disabled="(parseInt(item?.jumlah) > parseInt(item?.jumlah_k)) || parseInt(item?.jumlah) === 0"
+                      :loading="store.loadingSave" variant="secondary" size="sm"
+                      @click.stop="handleAdd(item)">Add</u-btn>
                   </u-row>
-                  <u-separator spacing=""></u-separator>
-                </template>
-                <u-row flex1 right class="w-full mt-2"  gap="gap-2">
-                  <u-btn  @click="handleOk">Tutup</u-btn>
                 </u-row>
-              </u-col>
-
-            </div>
-          </u-row>
-          <u-row>
-            <u-empty v-if="!store.form?.rinci?.length" title="Belum Ada Items" icon="baggage-claim" />
-            <u-list v-else :spaced="true" anim :items="groupedItems">
-              <template #item="{ item, isHovered }">
-                <ListRincian :item="item" :store="store" :is-hovered="isHovered" />
+                <u-separator spacing=""></u-separator>
               </template>
-            </u-list>
-          </u-row>
+              <u-row flex1 right class="w-full mt-2" gap="gap-2">
+                <u-btn @click="handleOk">Tutup</u-btn>
+              </u-row>
+            </u-col>
 
-        </u-card>
-
-        <u-col align="items-end" class="col-span-4" gap="gap-1">
-          <u-text class="font-bold" size="sm">Ringkasan Penjualan</u-text>
-          <u-separator spacing="my-1"></u-separator>
-          <u-row>
-            <u-text>Total Penjualan : </u-text>
-            <u-text class="font-bold" size="lg" color="text-light-primary">{{ formatRupiah(totalPenjualan) || 0 }}</u-text>
-          </u-row>
-          <u-row class="-mt-2">
-            <u-text>Total Item : </u-text>
-            <u-text class="font-bold" size="lg">{{ groupedItems?.length || 0 }}</u-text>
-          </u-row>
-          <u-row class="">
-            <u-badge v-if="store.form?.flag" :variant="store.form?.flag ? 'success' : 'warning'">Complete</u-badge>
-            <u-badge v-else :variant="store.mode === 'add' ? 'success' : 'warning'"> {{ store.mode === 'add' ? 'Baru' : 'Draft' }}</u-badge>
-          </u-row>
-          <u-separator v-if="store.mode === 'edit'" spacing="my-2"></u-separator>
-
-
-          <!-- Radiogroup container -->
-          <div
-            v-if="store.mode === 'edit'"
-            class="grid grid-cols-2 gap-2 mb-2"
-            role="radiogroup"
-            aria-label="Cara Bayar"
-          >
-            <u-radio v-model="formBayar.cara_bayar" value="TUNAI" label="TUNAI" />
-            <u-radio v-model="formBayar.cara_bayar" value="TRANSFER" label="TRANSFER" />
           </div>
+        </u-row>
+        <u-row>
+          <u-empty v-if="!store.form?.rinci?.length" title="Belum Ada Items" icon="baggage-claim" />
+          <u-list v-else :spaced="true" anim :items="groupedItems">
+            <template #item="{ item, isHovered }">
+              <ListRincian :item="item" :store="store" :is-hovered="isHovered" />
+            </template>
+          </u-list>
+        </u-row>
+
+      </u-card>
+
+      <u-col align="items-end" class="col-span-4" gap="gap-1">
+        <u-text class="font-bold" size="sm">Ringkasan Penjualan</u-text>
+        <u-separator spacing="my-1"></u-separator>
+        <u-row>
+          <u-text>Total Penjualan : </u-text>
+          <u-text class="font-bold" size="lg" color="text-light-primary">{{ formatRupiah(totalPenjualan) || 0
+            }}</u-text>
+        </u-row>
+        <u-row class="-mt-2">
+          <u-text>Total Item : </u-text>
+          <u-text class="font-bold" size="lg">{{ groupedItems?.length || 0 }}</u-text>
+        </u-row>
+        <u-row class="">
+          <u-badge v-if="store.form?.flag" :variant="store.form?.flag ? 'success' : 'warning'">Complete</u-badge>
+          <u-badge v-else :variant="store.mode === 'add' ? 'success' : 'warning'"> {{ store.mode === 'add' ? 'Baru' :
+            'Draft' }}</u-badge>
+        </u-row>
+        <u-separator v-if="store.mode === 'edit'" spacing="my-2"></u-separator>
+
+
+        <!-- Radiogroup container -->
+        <div v-if="store.mode === 'edit'" class="grid grid-cols-2 gap-2 mb-2" role="radiogroup" aria-label="Cara Bayar">
+          <u-radio v-model="formBayar.cara_bayar" value="TUNAI" label="TUNAI" />
+          <u-radio v-model="formBayar.cara_bayar" value="TRANSFER" label="TRANSFER" />
+        </div>
 
 
 
 
-          <u-row v-if="store.mode === 'edit'" class="w-full">
-            <u-input v-model.number="formBayar.jumlah_bayar" label="Pembayaran" :error="errorPembayaran"/>
-          </u-row>
-          <u-row>
-            <u-text>Kembali : Rp. </u-text>
-            <u-text class="font-bold" size="lg" color="text-danger">{{ formatRupiah(kembali) || 0 }}</u-text>
-          </u-row>
-          <u-separator spacing="my-2"></u-separator>
-          <u-row class="z-9">
-            <u-btn v-if="store.mode === 'edit'" variant="secondary" @click="initForm">Baru</u-btn>
-            <u-btn v-if="store.form && !errorPembayaran && !store.form?.flag" variant="primary" @click="simpanPenjualan">Simpan</u-btn>
-          </u-row>
-          <u-row class="z-9">
-            <u-btn v-if="store.form?.flag" variant="secondary" @click="modalNota = true">Cetak</u-btn>
-          </u-row>
-        </u-col>
+        <u-row v-if="store.mode === 'edit'" class="w-full">
+          <u-input ref="inpPembayaranRef" v-model.number="formBayar.jumlah_bayar" label="Pembayaran"
+            :error="errorPembayaran" @keydown.enter.stop="simpanPenjualan" />
+        </u-row>
+        <u-row>
+          <u-text>Kembali : Rp. </u-text>
+          <u-text class="font-bold" size="lg" color="text-danger">{{ formatRupiah(kembali) || 0 }}</u-text>
+        </u-row>
+        <u-separator spacing="my-2"></u-separator>
+        <u-row class="z-9">
+          <u-btn v-if="store.mode === 'edit'" variant="secondary" @click="initForm">Baru</u-btn>
+          <u-btn v-if="store.form && !errorPembayaran && !store.form?.flag" :loading="loadingLock" variant="primary"
+            @click="simpanPenjualan">Simpan</u-btn>
+        </u-row>
+        <u-row class="z-9">
+          <u-btn v-if="store.form?.flag" variant="secondary" @click="modalNota = true">Cetak</u-btn>
+        </u-row>
+      </u-col>
     </u-grid>
 
-    <div v-if="store.form?.flag" class="absolute top-0 left-0 right-0 w-full h-full rounded-2xl flex items-center justify-center p-4 bg-light-primary/10" padding="p-0"></div>
+    <div v-if="store.form?.flag"
+      class="absolute top-0 left-0 right-0 w-full h-full rounded-2xl flex items-center justify-center p-4 bg-light-primary/10"
+      padding="p-0"></div>
     <!-- MODAL NOTA PENJUALAN -->
-    <modal-nota v-if="modalNota" v-model="modalNota" title="Nota Penjualan" :store="store" :form-bayar="formBayar" :form="form"
-      @close="handleCloseModalNota" />
+    <modal-nota v-if="modalNota" v-model="modalNota" title="Nota Penjualan" :store="store" :form-bayar="formBayar"
+      :form="form" @close="handleCloseModalNota" />
   </u-col>
 </template>
 
@@ -362,7 +358,10 @@ function lihatStokAll(item) {
 }
 
 const auth = useAuthStore()
-
+const searchPelangganRef = ref(null)
+const searchDokterRef = ref(null)
+const inpPembayaranRef = ref(null)
+const searchBarangRef = ref('')
 const searchPelanggan = ref('')
 const searchDokter = ref('')
 const searchBarang = ref('')
@@ -388,6 +387,7 @@ const updateClock = () => {
 }
 
 onMounted(() => {
+  
   updateClock()
   timer = setInterval(updateClock, 1000)
 })
@@ -417,6 +417,62 @@ const form = ref({
 
 })
 
+function handleKeydown(e) {
+  if (e.ctrlKey && e.key === 'F2') {
+    e.preventDefault();
+    e.stopPropagation();
+    inpPembayaranRef.value?.focus();
+  } else if (e.key === 'F1') {
+    e.preventDefault();
+    window.location.reload()
+    // } else if (e.key === 'F3') {
+    //   e.preventDefault();
+    //   if (cart.value.length > 0) {
+    //     cart.value[cart.value.length - 1].qty += 1;
+    //   }
+    // } else if (e.key === 'F4') {
+    //   e.preventDefault();
+    //   removeLastItem();
+    // } else if (e.key === 'F5') {
+    //   e.preventDefault();
+    //   clearCart();
+    // } else if (e.key === 'F6') {
+    //   e.preventDefault();
+    //   if (lastClickedProduct.value) {
+    //     addToCart(lastClickedProduct.value);
+    //   }
+  } else if (e.key === 'Escape') {
+    if (props?.store?.barangSelected) handleOk();
+  }
+  else if (e.ctrlKey && e.key === '1') {
+    e.preventDefault()
+    e.stopPropagation()
+    nextTick(() => {
+      searchPelangganRef.value?.focus?.()
+    })
+  }
+  else if (e.ctrlKey && e.key === '2') {
+    e.preventDefault()
+    e.stopPropagation()
+    nextTick(() => {
+      searchDokterRef.value?.focus?.()
+    })
+  }
+  else if (e.ctrlKey && e.key === '`') {
+    e.preventDefault()
+    e.stopPropagation()
+    nextTick(() => {
+      searchBarangRef.value?.focus?.()
+    })
+  }
+  else if (e.ctrlKey && e.code === 'Space') {
+    e.preventDefault()
+    e.stopPropagation()
+    formBayar.value.cara_bayar = formBayar.value.cara_bayar === 'TUNAI' ? 'TRANSFER' : 'TUNAI'
+
+    nextTick(() => inpPembayaranRef.value?.focus?.())
+  }
+}
 const formBayar = ref({
     diskon: 0,
     jumlah_bayar: 0,
@@ -704,10 +760,19 @@ const handleCloseModalNota = () => {
   // initForm()
   window.location.reload()
 }
+async function initCursor() {
+  await nextTick()
+  const el = searchBarangRef?.value
 
+  el?.focus?.()
+  // tryFocus(searchBarangRef)
+}
 onMounted(() => {
-  // document.addEventListener('click', handleClickOutside)
+  window.addEventListener('keydown', handleKeydown);
   initForm()
+  setTimeout(() => {
+    initCursor()
+  }, 200)
 })
 
 function initForm(){
@@ -727,7 +792,13 @@ onUnmounted(() => {
   // document.removeEventListener('click', handleClickOutside)
 })
 
+watch(() => props.store.mode, (obj) => {
 
+  if (obj === 'edit') {
+    initCursor()
+  }
+
+}, { deep: true })
 
 watch(() => props.store.maxRight, (newMax, oldMax) => {
   // if (!newMax) {

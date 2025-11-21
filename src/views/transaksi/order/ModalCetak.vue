@@ -10,8 +10,8 @@
           <div>
             <div class="text-xl font-semibold tracking-wide">{{ company?.nama || 'Nama Apotik nya' }}</div>
             <p class="text-sm text-gray-600">
-              {{ company?.address || 'Alamat Apotik nya' }}<br />
-              Tel: {{ company?.telepon || '08123456789' }}
+              {{ company?.alamat || 'Alamat Apotik nya' }}<br />
+              Telp: {{ formatTeleponID(company?.telepon) || '0' }}
             </p>
           </div>
         </div>
@@ -134,7 +134,7 @@
 <script setup>
 import { ref, onMounted, computed, watch } from 'vue'
 import { formatDateIndo, formatTimeOnly } from '@/utils/dateHelper'
-import { formatRupiah } from '@/utils/numberHelper'
+import { formatRupiah, formatTeleponID } from '@/utils/numberHelper'
 
 import { useAppStore } from '@/stores/app'
 

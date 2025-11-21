@@ -80,21 +80,24 @@
             <div class="space-y-2 text-sm">
               Pembayaran: <span class="font-semibold">{{ form?.hutang }}</span>
             </div>
+            <div v-if="totalPajak == 0" class="space-y-2 text-xs mt-4">
+              Harga Sudah Termasuk Pajak
+            </div>
           </div>
           <div class="rounded-xl p-4 bg-gray-50">
             <div class="space-y-2 text-sm">
               <div class="flex items-center justify-between">
                 <span>Subtotal</span>
-                <span class="font-medium">Rp . {{ formatRupiah(subTotal) }}</span>
+                <span class="font-medium">Rp {{ formatRupiah(subTotal) }}</span>
               </div>
               <div class="flex items-center justify-between">
                 <span>Pajak </span>
-                <span class="font-medium">Rp. {{ formatRupiah(totalPajak) }}</span>
+                <span class="font-medium">Rp {{ formatRupiah(totalPajak) }}</span>
               </div>
               <div class="border-t my-2"></div>
               <div class="flex items-center justify-between text-sm">
                 <span class="font-semibold">Total Penerimaan</span>
-                <span class="font-semibold">Rp . {{ formatRupiah(totalPenerimaan) }}</span>
+                <span class="font-semibold">Rp {{ formatRupiah(totalPenerimaan) }}</span>
               </div>
             </div>
           </div>

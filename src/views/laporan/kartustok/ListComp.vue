@@ -57,7 +57,7 @@
             </div>
           </u-row>
           <u-row right class="">
-            <u-btn label="Detail" @click="openDetail" />
+            <u-btn :loading="loadingOpen" label="Detail" @click="openDetail" />
           </u-row>
         </u-row>
       </u-col>

@@ -11,6 +11,13 @@ export const useBarangStore = createTemplateStore('barang', {
   order: 'Nama',
   persist: false
 })
+export const useKategoriStore = createTemplateStore('kategori', {
+  baseUrl: 'api/v1/master/kategori',
+  order_by: 'nama',
+  sort: 'asc',
+  order: 'Nama',
+  persist: false
+})
 export const useSatuanStore = createTemplateStore('satuan', {
   baseUrl: 'api/v1/master/satuan',
   order_by: 'nama',

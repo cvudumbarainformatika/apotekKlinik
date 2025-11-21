@@ -22,12 +22,12 @@
         <div class="text-[11px]">
           <div v-for="(it, i) in groupedItems" :key="i" class="py-0.5">
             <div class="flex justify-between">
-              <span class="pr-2">{{ it?.nama || '-' }}<span class="opacity-70"></span></span>
+              <span class="pr-2 text-[12px]">{{ it?.nama || '-' }}<span class=""></span></span>
               <!-- <span>{{ f.rupiah(it.qty * it.price - (it.discount||0)) }}</span> -->
-              <span>{{ formatRupiah(it?.subtotal) }}</span>
+              <span class="text-[12px]">{{ formatRupiah(it?.subtotal) }}</span>
             </div>
-            <div class="flex justify-between text-[10px] opacity-70">
-              <span>{{ it?.jumlah_k }} {{ it?.satuan_k }} x {{ formatRupiah(it?.harga_jual) }}</span>
+            <div class="flex justify-between text-[10px]">
+              <span>{{ it?.jumlah_k }} {{ it?.satuan_k }} x Rp {{ formatRupiah(it?.harga_jual) }}</span>
               <!-- <span>Disc: -</span> -->
             </div>
           </div>
@@ -38,12 +38,12 @@
         <div class="text-[12px]">
           <!-- <div class="flex justify-between"><span>Subtotal</span><span>5.000.000</span></div> -->
           <!-- <div class="flex justify-between"><span>Pajak</span><span>20.000</span></div> -->
-          <div class="flex justify-between font-semibold text-sm"><span>Total</span><span>{{
-              formatRupiah(totalPenjualan) }}</span></div>
-          <div class="flex justify-between"><span>Bayar ({{ formBayar?.cara_bayar }})</span><span>{{
-              formatRupiah(formBayar?.jumlah_bayar) }}</span></div>
-          <div class="flex justify-between" :class="{ 'font-semibold': kembali >= 0 }"><span>Kembali</span><span>{{
-              formatRupiah(kembali) }}</span></div>
+          <div class="flex justify-between font-semibold"><span>Total</span><span>
+              Rp {{ formatRupiah(totalPenjualan) }}</span></div>
+          <div class="flex justify-between"><span>Bayar ({{ formBayar?.cara_bayar }})</span><span>
+              Rp {{ formatRupiah(formBayar?.jumlah_bayar) }}</span></div>
+          <div class="flex justify-between" :class="{ 'font-semibold': kembali >= 0 }"><span>Kembali</span><span>
+              Rp {{ formatRupiah(kembali) }}</span></div>
         </div>
 
 
@@ -52,7 +52,7 @@
           <div class="w-full border-t border-dashed border-black my-1"></div>
           <p class="mt-1">{{ app?.form?.footer || 'Terimakasih atas kunjungan anda' }}</p>
           <!-- <p class="opacity-60">Simpan struk ini sebagai bukti transaksi.</p> -->
-          <p class="mt-1 opacity-80">&copy; 2025 CV Udumbara Informatika</p>
+          <p class="mt-1">&copy; 2025 CV Udumbara Informatika</p>
         </div>
 
       </div>

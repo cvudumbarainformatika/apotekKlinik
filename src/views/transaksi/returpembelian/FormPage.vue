@@ -417,6 +417,7 @@ const handleRetur = (e) => {
 
   props.store.create(form.value)
   .then(() => {
+    handleOk()
     // clearSelectedBarang()
   })
   

@@ -26,8 +26,13 @@
           </u-row>
         </u-row>
         <u-row flex1 class="w-full">
-          <u-input v-model="form.kandungan" label="Kandungan" :error="isError('kandungan')"
-            :error-message="errorMessage('kandungan')" />
+          <!-- <u-input v-model="form.kandungan" label="Kandungan" :error="isError('kandungan')"
+            :error-message="errorMessage('kandungan')" /> -->
+          <u-select label="Kategori" v-model="form.kode_kategori" :options="optionKategori" :error="isError('kategori')"
+            :error-message="errorMessage('kategori')" @update:modelValue="(val) => {
+              console.log('val', val);
+
+            }" />
         </u-row>
         <u-row flex1 class="w-full">
           <!-- <u-row>
@@ -88,6 +93,7 @@ const form = ref({
   satuan_b: '',
   isi: '',
   kandungan: '',
+  kode_kategori: '',
   harga_jual_resep_k: '',
   harga_jual_biasa_k: '',
   persen_resep: '',
@@ -102,6 +108,8 @@ function errorMessage(field) {
   return error.value?.[field]?.[0] ?? null
 }
 
+const masterKategori = useKategoriStore()
+const optionKategori = computed(() => masterKategori?.items?.map(item => ({ label: item?.nama, value: item?.kode })) || [])
 
 
 watch(
@@ -151,7 +159,7 @@ function init() {
 
 }
 
-import { useSatuanStore } from '@/stores/template/register'
+import { useKategoriStore, useSatuanStore } from '@/stores/template/register'
 const masterSatuan = useSatuanStore()
 const optionSatuans = computed(() => masterSatuan?.items?.map(item => ({ label: item?.nama, value: item?.nama })) || [])
 

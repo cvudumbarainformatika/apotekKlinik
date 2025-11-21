@@ -27,10 +27,10 @@
                 <div class="font-bold">{{ item?.isi }}</div>
               </u-row>
               <u-row flex1 class="w-full text-xs">
-                <div>Harga Rsp : </div>
+                <!-- <div>Harga Rsp : </div>
                 <div class="font-bold">{{ formatRupiah(item?.harga_jual_resep_k) }}</div>
                 <div>Harga Biasa : </div>
-                <div class="font-bold">{{ formatRupiah(item?.harga_jual_biasa_k) }}</div>
+                <div class="font-bold">{{ formatRupiah(item?.harga_jual_biasa_k) }}</div> -->
               </u-row>
              
             </div>

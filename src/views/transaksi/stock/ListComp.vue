@@ -110,7 +110,7 @@
               </u-grid>
 
               <u-grid cols="10">
-                <u-row class="col-span-5">
+                <!-- <u-row class="col-span-5">
                   <u-grid cols="4">
                     <u-row class="col-span-2">
                       <span class="font-medium">Harga Resep</span>
@@ -127,19 +127,19 @@
                       <span>: {{ item?.barang?.harga_jual_biasa_k }}</span>
                     </u-row>
                   </u-grid>
-                </u-row>
+                </u-row> -->
                 <u-row class="col-span-5">
 
                 </u-row>
               </u-grid>
 
               <u-grid cols="8">
-                <u-row class="col-span-1">
+                <!-- <u-row class="col-span-1">
                   <span class="font-medium">Kandungan</span>
                 </u-row>
                 <u-row class="col-span-7">
                   <span>: {{ item?.barang?.kandungan }}</span>
-                </u-row>
+                </u-row> -->
               </u-grid>
 
               <u-grid cols="8" class="mb-3">

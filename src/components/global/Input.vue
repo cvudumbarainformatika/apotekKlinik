@@ -56,11 +56,12 @@ function handleInput(e) {
   // ❗ Hanya izinkan angka dan koma
   if (props.type === 'number') {
     raw = raw.replace(/[^\d,]/g, '') // Hanya digit dan koma
-    e.target.value = raw // Untuk refleksi langsung di input
     internalValue.value = raw
+    e.target.value = raw 
+    emit('update:modelValue', raw)
 
-    const parsed = parseNumber(raw)
-    emit('update:modelValue', isNaN(parsed) ? null : parsed)
+    // const parsed = parseNumber(raw)
+    // emit('update:modelValue', isNaN(parsed) ? null : parsed)
 
   
   } else {
@@ -78,7 +79,10 @@ function handleBlur() {
   emit('blur')
   isFocussed.value = false
   if (props.type === 'number') {
-    internalValue.value = formatNumber(props.modelValue)
+    const parsed = parseNumber(internalValue.value)
+    emit('update:modelValue', isNaN(parsed) ? null : parsed)
+
+    internalValue.value = formatNumber(parsed)
   }
 }
 

@@ -8,15 +8,19 @@
           <u-icon name="layers" class="w-4 h-4" />
           <u-text class="font-bold">Informasi Order</u-text>
         </u-row>
-        <u-row >
-          <u-input-date type="date" v-model="form.tgl_order" :error="errorMessage('tgl_order')"  />
+        <u-row>
+          <u-input-date type="date" v-model="form.tgl_order" :error="errorMessage('tgl_order')" />
         </u-row>
-        <u-row >
-          <u-input v-model="form.nomor_order" label="Nomor Order (Auto)" 
-            readonly
-            :error="isError('no_order')"
-            :error-message="errorMessage('no_order')" 
-          />
+        <u-row>
+          <u-input v-model="form.nomor_order" label="Nomor Order (Auto)" readonly :error="isError('no_order')"
+            :error-message="errorMessage('no_order')" />
+        </u-row>
+        <u-row>
+          <u-select label="Kategori" v-model="form.kode_kategori" :options="optionKategori" :error="isError('kategori')"
+            :error-message="errorMessage('kategori')" @update:modelValue="(val) => {
+              console.log('val', val);
+              loadBarang()
+            }" />
         </u-row>
       </u-card>
 
@@ -27,16 +31,11 @@
           <u-text class="font-bold">Informasi Supplier</u-text>
         </u-row>
         <u-row>
-          <u-autocomplete v-model="searchSupplier" placeholder="Cari Supplier" 
-            :debounce="300" :min-search-length="2" 
-            item-key="id" 
-            item-label="nama"
-            not-found-text="Data Supplier tidak ditemukan" 
-            not-found-subtext="Coba kata kunci lain" 
-            :show-add-button="false"
-            api-url="/api/v1/master/supplier/get-list" api-response-path="data.data" :api-params="{ per_page: 10 }"
-            :use-api="true" @select="handleSelected" @items-loaded="onItemsLoaded"
-          ></u-autocomplete>
+          <u-autocomplete v-model="searchSupplier" placeholder="Cari Supplier" :debounce="300" :min-search-length="2"
+            item-key="id" item-label="nama" not-found-text="Data Supplier tidak ditemukan"
+            not-found-subtext="Coba kata kunci lain" :show-add-button="false" api-url="/api/v1/master/supplier/get-list"
+            api-response-path="data.data" :api-params="{ per_page: 10 }" :use-api="true" @select="handleSelected"
+            @items-loaded="onItemsLoaded"></u-autocomplete>
         </u-row>
         <u-row>
           <div v-if="store?.supplierSelected"
@@ -48,8 +47,7 @@
                   {{ store.supplierSelected?.nama }}
                 </u-text>
               </u-row>
-              <button @click="clearSelectedSupplier"
-                class="text-primary hover:text-danger " aria-label="Hapus">
+              <button @click="clearSelectedSupplier" class="text-primary hover:text-danger " aria-label="Hapus">
                 <u-icon name="X" class="w-4 h-4" />
               </button>
             </div>
@@ -62,145 +60,135 @@
               <u-icon name="UserSearch" class="w-4 h-4 text-primary" />
               <div>
                 <u-text>
-                  Silahkan cari dan pilih supplier di atas untuk melanjutkan order 
+                  Silahkan cari dan pilih supplier di atas untuk melanjutkan order
                 </u-text>
               </div>
             </u-row>
           </div>
-          
+
         </u-row>
       </u-card>
 
-      
-      
+
+
     </u-grid>
-  
+
     <!-- CONTENT -->
     <u-grid cols="12">
 
       <!-- List Items -->
-        <u-card class="col-span-8 h-full space-y-4">
-          <u-row>
-            <u-icon name="baggage-claim" class="w-4 h-4" />
-            <u-text class="font-bold">Informasi Item</u-text>
-          </u-row>
-          <u-row>
-            <u-autocomplete v-model="searchBarang" placeholder="Cari Barang" 
-              :debounce="300" :min-search-length="2" 
-              item-key="id" 
-              item-label="nama"
-              not-found-text="Data Barang tidak ditemukan" 
-              not-found-subtext="Coba kata kunci lain" 
-              :show-add-button="false"
-              api-url="/api/v1/master/barang/get-list" api-response-path="data.data" :api-params="{ per_page: 10 }"
-              :use-api="true" @select="handleSelectedBarang" @items-loaded="onItemsLoadedBarang"
-            >
-              <template #item="{ item }">
-                <u-col gap="gap-1">
-                  <u-text size="sm" class="font-medium">{{ item?.nama }}</u-text>
-                  <u-row class="-mt-1" gap="gap-1">
-                    <u-text class="">{{ item?.kode }}</u-text>, 
-                    <u-text class="">{{ item?.satuan_k }}</u-text> | 
-                    <u-text class="">{{ item?.satuan_b }}</u-text>
-                    <u-text class="">Isi {{ item?.isi }}</u-text>
-                  </u-row>
-                </u-col>
-              </template>
-            </u-autocomplete>
-          </u-row>
-
-          <u-row class="relative -mt-4">
-            <div v-if="store?.barangSelected"
-              ref="menuBarangRef"
-              class="bg-background border-1 border-primary rounded-xl shadow-sm p-4 transition-all duration-300 hover:shadow-md w-full absolute z-10 -top-4">
-              <u-grid cols="12" gap="gap-4">
-                <div class="col-span-4">
-                  <u-text class="font-bold">Nama Barang</u-text>
-                  <u-text>{{ store.barangSelected?.nama || '-' }}</u-text>
-                </div>
-                <div class="col-span-4 text-center">
-                  <u-text class="font-bold">Satuan</u-text>
-                  <u-text>{{ store.barangSelected?.satuan_k || '-' }} | {{ store.barangSelected?.satuan_b || '-' }}, {{ store.barangSelected?.isi || 0 }}</u-text>
-                </div>
-                <div class="col-span-4 text-right">
-                  <u-text class="font-bold">Kode</u-text>
-                  <u-text>{{ store.barangSelected?.kode || '-' }}</u-text>
-                </div>
-
-                <div class="col-span-12">
-                  <u-separator spacing="-my-2"></u-separator>
-                </div>
-                
-                <u-row class="col-span-4">
-                  <u-input ref="inpJumlahRef" v-model="form.jumlah_pesan" label="jumlah_pesan" type="number"
-                    :error="isError('jumlah_pesan')"
-                    :error-message="errorMessage('jumlah_pesan')" 
-                  />
+      <u-card class="col-span-8 h-full space-y-4">
+        <u-row>
+          <u-icon name="baggage-claim" class="w-4 h-4" />
+          <u-text class="font-bold">Informasi Item</u-text>
+        </u-row>
+        <u-row>
+          <u-autocomplete v-model="searchBarang" placeholder="Cari Barang" :min-search-length="2" item-key="kode"
+            item-label="nama" :items="filteredBarang" :use-api="false" :debounce="300"
+            not-found-text="Data Barang tidak ditemukan" not-found-subtext="Coba kata kunci lain"
+            :show-add-button="false" @select="handleSelectedBarang"
+            @items-loaded="onItemsLoadedBarang">
+            <template #item="{ item }">
+              <u-col gap="gap-1">
+                <u-text size="sm" class="font-medium">{{ item?.nama }}</u-text>
+                <u-row class="-mt-1" gap="gap-1">
+                  <u-text class="">{{ item?.kode }}</u-text>,
+                  <u-text class="">{{ item?.satuan_k }}</u-text> |
+                  <u-text class="">{{ item?.satuan_b }}</u-text>
+                  <u-text class="">Isi {{ item?.isi }}</u-text>
                 </u-row>
-                <u-row right class="col-span-8 ">
-                  <u-btn variant="secondary" label="Batal"  @click="handleBatal"/>
-                  <u-btn :loading="store.loadingSave" label="Simpan" @click.stop="handleSubmit"  />
-                </u-row>
-              </u-grid>
-            </div>
-          </u-row>
-          <u-row>
-            <u-empty v-if="!store.form?.order_records?.length" title="Belum Ada Items" icon="baggage-claim" />
-            <u-list v-else :spaced="true" anim :items="store.form?.order_records">
-              <template #item="{ item, isHovered }">
-                <ListRincian :item="item" :store="store" :is-hovered="isHovered" />
-              </template>
-            </u-list>
-          </u-row>
+              </u-col>
+            </template>
+          </u-autocomplete>
+        </u-row>
 
-        </u-card>
+        <u-row class="relative -mt-4">
+          <div v-if="store?.barangSelected" ref="menuBarangRef"
+            class="bg-background border-1 border-primary rounded-xl shadow-sm p-4 transition-all duration-300 hover:shadow-md w-full absolute z-10 -top-4">
+            <u-grid cols="12" gap="gap-4">
+              <div class="col-span-4">
+                <u-text class="font-bold">Nama Barang</u-text>
+                <u-text>{{ store.barangSelected?.nama || '-' }}</u-text>
+              </div>
+              <div class="col-span-4 text-center">
+                <u-text class="font-bold">Satuan</u-text>
+                <u-text>{{ store.barangSelected?.satuan_k || '-' }} | {{ store.barangSelected?.satuan_b || '-' }}, {{
+                  store.barangSelected?.isi || 0 }}</u-text>
+              </div>
+              <div class="col-span-4 text-right">
+                <u-text class="font-bold">Kode</u-text>
+                <u-text>{{ store.barangSelected?.kode || '-' }}</u-text>
+              </div>
 
-        <u-col align="items-end" class="col-span-4">
-          <u-text class="font-bold" size="sm">Summary Order</u-text>
-          <u-separator spacing="-my-2"></u-separator>
-          <u-row>
-            <u-text>Total Item Order : </u-text>
-            <u-text class="font-bold" size="sm">{{ store.form?.order_records?.length || 0 }}</u-text>
-          </u-row>
-          <u-row>
-            <u-badge v-if="store.form?.flag" variant="danger">Terkunci</u-badge>
-            <u-badge v-else :variant="store.mode === 'add' ? 'success' : 'warning'">Mode {{ store.mode === 'add' ? 'Tambah' : 'Edit' }}</u-badge>
-          </u-row>
-          <u-separator spacing="-my-1"></u-separator>
-          <u-row class="z-9">
-            <u-btn v-if="store.mode === 'edit'" variant="secondary" @click="initForm">Order Baru</u-btn>
-            <u-btn v-if="store.form" :loading="loadingLock" @click="handleKunci">{{ store.form?.flag ? 'Buka Kunci' : 'Kunci Order' }}</u-btn>
-          </u-row>
-          <u-row class="z-9">
-            <u-btn v-if="store.form?.flag" :loading="loadingLock" @click="handlePrint">Print Order</u-btn>
-          </u-row>
+              <div class="col-span-12">
+                <u-separator spacing="-my-2"></u-separator>
+              </div>
 
-        </u-col>
+              <u-row class="col-span-4">
+                <u-input ref="inpJumlahRef" v-model="form.jumlah_pesan" label="jumlah_pesan" type="number"
+                  :error="isError('jumlah_pesan')" :error-message="errorMessage('jumlah_pesan')" />
+              </u-row>
+              <u-row right class="col-span-8 ">
+                <u-btn variant="secondary" label="Batal" @click="handleBatal" />
+                <u-btn :loading="store.loadingSave" label="Simpan" @click.stop="handleSubmit" />
+              </u-row>
+            </u-grid>
+          </div>
+        </u-row>
+        <u-row>
+          <u-empty v-if="!store.form?.order_records?.length" title="Belum Ada Items" icon="baggage-claim" />
+          <u-list v-else :spaced="true" anim :items="store.form?.order_records">
+            <template #item="{ item, isHovered }">
+              <ListRincian :item="item" :store="store" :is-hovered="isHovered" />
+            </template>
+          </u-list>
+        </u-row>
+
+      </u-card>
+
+      <u-col align="items-end" class="col-span-4">
+        <u-text class="font-bold" size="sm">Summary Order</u-text>
+        <u-separator spacing="-my-2"></u-separator>
+        <u-row>
+          <u-text>Total Item Order : </u-text>
+          <u-text class="font-bold" size="sm">{{ store.form?.order_records?.length || 0 }}</u-text>
+        </u-row>
+        <u-row>
+          <u-badge v-if="store.form?.flag" variant="danger">Terkunci</u-badge>
+          <u-badge v-else :variant="store.mode === 'add' ? 'success' : 'warning'">Mode {{ store.mode === 'add' ?
+            'Tambah' : 'Edit' }}</u-badge>
+        </u-row>
+        <u-separator spacing="-my-1"></u-separator>
+        <u-row class="z-9">
+          <u-btn v-if="store.mode === 'edit'" variant="secondary" @click="initForm">Order Baru</u-btn>
+          <u-btn v-if="store.form" :loading="loadingLock" @click="handleKunci">{{ store.form?.flag ? 'Buka Kunci' :
+            'Kunci Order' }}</u-btn>
+        </u-row>
+        <u-row class="z-9">
+          <u-btn v-if="store.form?.flag" :loading="loadingLock" @click="handlePrint">Print Order</u-btn>
+        </u-row>
+
+      </u-col>
     </u-grid>
 
-    <div v-if="store.form?.flag" class="absolute top-0 left-0 right-0 w-full h-full rounded-2xl flex items-center justify-center p-4 bg-light-primary/10" padding="p-0"></div>
-  
+    <div v-if="store.form?.flag"
+      class="absolute top-0 left-0 right-0 w-full h-full rounded-2xl flex items-center justify-center p-4 bg-light-primary/10"
+      padding="p-0"></div>
+
 
 
     <!-- Cetak -->
-    <modal-cetak v-model="modalCetak" title="Cetak Order" :store="store"
-      @close="modalCetak = false" />
+    <modal-cetak v-model="modalCetak" title="Cetak Order" :store="store" @close="modalCetak = false" />
   </u-col>
 </template>
 
 <script setup>
 import { ref, computed, nextTick, onMounted, onUnmounted, watch, defineAsyncComponent } from 'vue'
-
 import { api } from '@/services/api'
 import { useNotificationStore } from '@/stores/notification'
-
-const notify = useNotificationStore().notify
-
-
-
 import ModalCetak from './ModalCetak.vue'
-
-
+import { useKategoriStore } from '@/stores/template/register'
+const notify = useNotificationStore().notify
 const ListRincian = defineAsyncComponent(() => import('./ListRincian.vue'))
 
 const props = defineProps({
@@ -208,13 +196,13 @@ const props = defineProps({
   title: { type: String, default: 'Data' },
   mode: { type: String, default: 'add' }
 })
-
+const loading = ref(false)
 const searchSupplier = ref('')
 const searchBarang = ref('')
 const menuBarangRef = ref(null)
 const inpJumlahRef = ref(null)
 const loadingLock = ref(false)
-
+const barangList = ref([])
 const modalCetak = ref(false)
 
 const form = ref({
@@ -222,12 +210,15 @@ const form = ref({
   tgl_order: '',
   // kode_user: '',
   kode_supplier: '',
+  kode_kategori: '',
   kode_barang: '',
   satuan_k: '',
   satuan_b: '',
   isi: '',
   jumlah_pesan: 1,
 })
+const masterKategori = useKategoriStore()
+const optionKategori = computed(() => masterKategori?.items?.map(item => ({ label: item?.nama, value: item?.kode })) || [])
 
 const error = computed(() => {
   const err = props.store.error
@@ -282,6 +273,33 @@ const handleFocus = async (e) => {
   el?.inputRef?.focus()
   el?.inputRef?.select()
   
+}
+
+const filteredBarang = computed(() => {
+  const keyword = searchBarang.value?.toLowerCase() || ''
+  if (!keyword) return barangList.value
+  return barangList.value.filter(c =>
+    c.nama?.toLowerCase().includes(keyword) ||
+    c.kode?.toLowerCase().includes(keyword)
+  )
+})
+async function loadBarang() {
+  loading.value = true
+  const params = {
+    per_page: 1000,
+    kode_kategori: form.value.kode_kategori || ''
+  }
+  try {
+    const response = await api.get('/api/v1/master/barang/get-list', { params })
+    if (response.status === 200) {
+      barangList.value = response.data?.data
+    }
+  } catch (err) {
+    console.error('Gagal load cabang:', err)
+    err.message || 'Gagal memuat data cabang'
+  } finally {
+    loading.value = false
+  }
 }
 
 function handleClickOutside(event) {
@@ -366,7 +384,7 @@ const handleKunci = async (e) => {
 }
 
 onMounted(() => {
-  // document.addEventListener('click', handleClickOutside)
+
   initForm()
 })
 
