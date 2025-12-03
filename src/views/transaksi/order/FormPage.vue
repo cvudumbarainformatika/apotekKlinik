@@ -19,6 +19,9 @@
           <u-select label="Kategori" v-model="form.kode_kategori" :options="optionKategori" :error="isError('kategori')"
             :error-message="errorMessage('kategori')" @update:modelValue="(val) => {
               console.log('val', val);
+              searchBarang = ''
+              barangList.value = []
+              clearSelectedBarang()
               loadBarang()
             }" />
         </u-row>
@@ -291,6 +294,7 @@ async function loadBarang() {
   }
   try {
     const response = await api.get('/api/v1/master/barang/get-list', { params })
+    barangList.value = []
     if (response.status === 200) {
       barangList.value = response.data?.data
     }
