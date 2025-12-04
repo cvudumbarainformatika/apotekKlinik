@@ -76,6 +76,11 @@
 
     </u-grid>
 
+    <u-grid cols="5" v-if="store.form?.nomor_order"
+      class="absolute top-0 left-0 right-0 w-full h-full rounded-2xl flex items-center justify-center p-4 bg-light-primary/5"
+      padding="p-0">
+    </u-grid>
+
     <!-- CONTENT -->
     <u-grid cols="12">
 
@@ -89,8 +94,7 @@
           <u-autocomplete v-model="searchBarang" placeholder="Cari Barang" :min-search-length="2" item-key="kode"
             item-label="nama" :items="filteredBarang" :use-api="false" :debounce="300"
             not-found-text="Data Barang tidak ditemukan" not-found-subtext="Coba kata kunci lain"
-            :show-add-button="false" @select="handleSelectedBarang"
-            @items-loaded="onItemsLoadedBarang">
+            :show-add-button="false" @select="handleSelectedBarang" @items-loaded="onItemsLoadedBarang">
             <template #item="{ item }">
               <u-col gap="gap-1">
                 <u-text size="sm" class="font-medium">{{ item?.nama }}</u-text>
@@ -407,7 +411,8 @@ onUnmounted(() => {
 
 watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
   // console.log('🔥 watch form', newForm, oldForm);
-  
+  console.log('newForm', newForm);
+  console.log('oldForm', oldForm);
   for (const key in newForm) {
     if (newForm[key] !== oldForm[key]) {
       props.store.clearFieldError(key)
@@ -420,10 +425,11 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
       tgl_order: newForm?.tgl_order ?? '',
       // kode_user: newForm?.kode_user,
       kode_supplier: newForm?.kode_supplier ?? '',
-      
+      kode_kategori: newForm?.kode_kategori ?? newForm?.kategori?.kode ?? ''
     }
   }
-
+  
+ loadBarang()
 }, { deep: true })
 
 watch(() => props.store.maxRight, (newMax, oldMax) => {

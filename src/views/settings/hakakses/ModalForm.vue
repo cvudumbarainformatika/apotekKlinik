@@ -78,11 +78,11 @@ async function loadData() {
       aksesList.forEach(acc => {
         const key = `${acc.menu_id}:${acc.submenu_id ?? 'null'}`
         initialSet.value.add(key)
-        
-      if (!selectedMenuIds.value.includes(acc.menu_id)) {
+
+        if (!selectedMenuIds.value.includes(acc.menu_id)) {
           selectedMenuIds.value.push(acc.menu_id)
         }
-      
+
         if (acc.submenu_id !== null && acc.submenu_id !== undefined) {
           const subKey = `${acc.menu_id}:${acc.submenu_id}`
           if (!selectedSubIds.value.includes(subKey)) {
