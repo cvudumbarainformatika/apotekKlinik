@@ -9,6 +9,9 @@
             <div>
               <div class="text-xl font-semibold tracking-wide">{{ company?.nama || 'Nama Apotik nya' }}</div>
               <p class="text-sm text-gray-600">
+                Nomor SIA : {{ company?.nomor_sia }}<br />
+              </p>
+              <p class="text-sm text-gray-600">
                 {{ company?.alamat }}<br />
                 • Telp: {{ formatTeleponID(company?.telepon) }}
                 <!-- • Email: {{ company?.email || 'email Apotik nya' }} -->

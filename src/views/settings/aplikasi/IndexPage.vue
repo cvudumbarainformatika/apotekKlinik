@@ -13,6 +13,8 @@
             <u-col class="w-full mt-4" gap="gap-6">
               <u-input v-model="store.form.nama" label="Nama Apotik" :error="isError('nama')"
                 :error-message="errorMessage('nama')" />
+              <u-input v-model="store.form.nomor_sia" label="Nomor SIA" :error="isError('nomor_sia')"
+                :error-message="errorMessage('nomor_sia')" />
               <u-input v-model="store.form.telepon" label="Telepon" :error="isError('telepon')"
                 :error-message="errorMessage('telepon')" />
               <u-input v-model="store.form.pemilik" label="Nama Pemilik" :error="isError('pemilik')"

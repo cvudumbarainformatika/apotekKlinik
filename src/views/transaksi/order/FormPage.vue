@@ -15,7 +15,7 @@
           <u-input v-model="form.nomor_order" label="Nomor Order (Auto)" readonly :error="isError('no_order')"
             :error-message="errorMessage('no_order')" />
         </u-row>
-        <u-row>
+        <!-- <u-row>
           <u-select label="Kategori" v-model="form.kode_kategori" :options="optionKategori" :error="isError('kategori')"
             :error-message="errorMessage('kategori')" @update:modelValue="(val) => {
               console.log('val', val);
@@ -24,7 +24,7 @@
               clearSelectedBarang()
               loadBarang()
             }" />
-        </u-row>
+        </u-row> -->
       </u-card>
 
       <!-- HEADER 2 -->
@@ -91,10 +91,11 @@
           <u-text class="font-bold">Informasi Item</u-text>
         </u-row>
         <u-row>
-          <u-autocomplete v-model="searchBarang" placeholder="Cari Barang" :min-search-length="2" item-key="kode"
-            item-label="nama" :items="filteredBarang" :use-api="false" :debounce="300"
-            not-found-text="Data Barang tidak ditemukan" not-found-subtext="Coba kata kunci lain"
-            :show-add-button="false" @select="handleSelectedBarang" @items-loaded="onItemsLoadedBarang">
+          <u-autocomplete v-model="searchBarang" placeholder="Cari Barang" :debounce="300" :min-search-length="2"
+            item-key="id" item-label="nama" not-found-text="Data Barang tidak ditemukan"
+            not-found-subtext="Coba kata kunci lain" :show-add-button="false" api-url="/api/v1/master/barang/get-list"
+            api-response-path="data.data" :api-params="{ per_page: 10 }" :use-api="true" @select="handleSelectedBarang"
+            @items-loaded="onItemsLoadedBarang">
             <template #item="{ item }">
               <u-col gap="gap-1">
                 <u-text size="sm" class="font-medium">{{ item?.nama }}</u-text>
@@ -257,6 +258,7 @@ const handleSelectedBarang = (item) => {
   form.value.satuan_k = item?.satuan_k ?? null
   form.value.satuan_b = item?.satuan_b ?? null
   form.value.isi = item?.isi ?? null
+  form.value.kode_kategori = item?.kode_kategori ?? null
   searchBarang.value = ''
   // console.log('handleSelectedBarang', form.value);
 
@@ -294,7 +296,7 @@ async function loadBarang() {
   loading.value = true
   const params = {
     per_page: 1000,
-    kode_kategori: form.value.kode_kategori || ''
+    // kode_kategori: form.value.kode_kategori || ''
   }
   try {
     const response = await api.get('/api/v1/master/barang/get-list', { params })

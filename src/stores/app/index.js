@@ -21,6 +21,7 @@ export const useAppStore = defineStore('app-store', {
         pajak: 11,
         header: '',
         footer: '',
+        nomor_sia: ''
       }
 
       

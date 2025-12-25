@@ -50,6 +50,9 @@
           <img src="/images/logo.png" alt="logo" class="w-14 h-14 object-contain" />
           <div>
             <div class="text-xl font-semibold tracking-wide">{{ app?.form?.nama || 'Nama Apotik nya' }}</div>
+             <p class="text-sm text-gray-600">
+                Nomor SIA : {{ app?.form?.nomor_sia }}<br />
+              </p>
             <p class="text-sm text-gray-600">
               {{ app?.form?.alamat || 'Alamat Apotik nya' }}<br />
               Telp: {{ app?.form?.telepon || '08123456789' }}
