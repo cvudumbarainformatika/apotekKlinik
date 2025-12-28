@@ -40,10 +40,13 @@
 
 
       <div class="w-full border-t border-dashed border-black my-1"></div>
-       
+       <div class="mt-3 grid grid-cols-6 gap-x-6 gap-y-1 text-sm">
+          <div class="text-gray-500">User Entry</div>
+          <div class="font-medium">{{ data?.user?.nama || '-' }}</div>
+        </div>
 
         <!-- Items Table -->
-      <div class="mt-6">
+      <div class="mt-3">
         <table class="w-full text-sm border-separate [border-spacing:0]">
           <thead>
             <tr class="text-left">
@@ -155,6 +158,7 @@ const company = computed(() => {
 })
 
 const data = computed(() => {
+  console.log('data', props.store.form)
   return props.store.form
 })
 const totalSubtotal = computed(() => {

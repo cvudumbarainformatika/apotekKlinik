@@ -35,6 +35,8 @@
                                 </u-row>
 
                                 <u-col align="items-end" gap="gap-0" class="" padding="p-0">
+                                    <u-text color="text-gray-500" style="font-size: 10px !important;">{{
+                                        formatDateIndo(item?.tgl_order) }}</u-text>
                                     <!-- <u-icon name="lock-open" size="18" class="mb-1"
                                     :class="!item?.flag ? 'text-success' : 'text-danger'" /> -->
                                     <u-text color="text-gray-500" style="font-size: 10px !important;">{{
@@ -49,7 +51,7 @@
     </u-modal>
 </template>
 <script setup>
-import { useWaktuLaluReactive } from '@/utils/dateHelper'
+import { formatDateIndo, useWaktuLaluReactive } from '@/utils/dateHelper'
 // import { useOrderStore } from '@/stores/template/register'
 import { onMounted, ref } from 'vue'
 

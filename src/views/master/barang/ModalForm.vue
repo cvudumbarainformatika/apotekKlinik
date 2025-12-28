@@ -35,22 +35,22 @@
             }" />
         </u-row>
         <u-row flex1 class="w-full">
-          <!-- <u-row>
+          <u-row>
             <u-input type="number" v-model="form.harga_jual_resep_k" label="Harga jual Resep"
               :error="isError('harga_jual_resep_k')" :error-message="errorMessage('harga_jual_resep_k')" />
           </u-row>
           <u-row>
             <u-input type="number" v-model="form.harga_jual_biasa_k" label="Harga Jual Biasa"
               :error="isError('harga_jual_biasa_k')" :error-message="errorMessage('harga_jual_biasa_k')" />
-          </u-row> -->
-          <u-row>
+          </u-row>
+          <!-- <u-row>
             <u-input type="number" v-model="form.persen_resep" label="Margin Resep (%)" :error="isError('persen_resep')"
               :error-message="errorMessage('persen_resep')" />
           </u-row>
           <u-row>
             <u-input type="number" v-model="form.persen_biasa" label="Margin Biasa (%)" :error="isError('persen_biasa')"
               :error-message="errorMessage('persen_biasa')" />
-          </u-row>
+          </u-row> -->
         </u-row>
         <!-- <u-row flex1 class="w-full">
           <u-row>

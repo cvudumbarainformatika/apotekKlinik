@@ -299,8 +299,6 @@
         </div>
 
 
-
-
         <u-row v-if="store.mode === 'edit'" class="w-full">
           <u-input ref="inpPembayaranRef" v-model.number="formBayar.jumlah_bayar" label="Pembayaran"
             :error="errorPembayaran" @keydown.enter.stop="simpanPenjualan" />
@@ -337,10 +335,11 @@ import { api } from '@/services/api'
 import { formatWaktuSisa } from '@/utils/dateHelper'
 import { formatRupiah } from '@/utils/numberHelper'
 import ModalNota from './ModalNota.vue'
+import { useNotificationStore } from '@/stores/notification'
 
 
 const ListRincian = defineAsyncComponent(() => import('./ListRincian.vue'))
-
+const notify = useNotificationStore().notify
 const props = defineProps({
   store: { type: Object, required: true },
   title: { type: String, default: 'Data' },
@@ -549,7 +548,7 @@ const groupedItems = computed(() => {
   const map = new Map()
 
   const items = props?.store?.form?.rinci ?? []
-  console.log('groupedItems', items);
+  // console.log('groupedItems', items);
   items.forEach(item => {
     const key = item.kode_barang
     if (!map.has(key)) {
@@ -578,7 +577,7 @@ const groupedItems = computed(() => {
 
 
 const handleOk = () => {
-  console.log('handleOk');
+  // console.log('handleOk');
   clearSelectedBarang()
   
 }
@@ -587,7 +586,7 @@ const handleAdd = async(item) => {
   // console.log('handleAdd', props.store.barangSelected);
 
   const selected = props?.store?.barangSelected ?? null
-  console.log('handleAdd', selected);
+  // console.log('handleAdd', selected);
   form.value.kode_barang = item?.kode_barang ?? null
   form.value.jumlah_k = item?.jumlah ?? 0
   form.value.satuan_k = item?.satuan_k ?? null
@@ -601,19 +600,21 @@ const handleAdd = async(item) => {
   form.value.tgl_exprd = item?.tgl_exprd ?? null
   form.value.id_stok = item?.id ?? null
   form.value.hpp = parseFloat(selected?.hpp)
+  if (form.value.harga_jual < form.value.harga_beli) {
+    return notify({ message: 'Harga Jual Lebih Kecil dari Harga Beli', type: 'error' })
+  }
 
-
-  console.log('form', form.value);
   props.store.create(form.value)
   
 }
 
 function getHargaJual() {
   const selected = props?.store?.barangSelected ?? null
-  const resep = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_resep ?? 0) / 100)
-  const biasa = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_biasa ?? 0) / 100)
-  // return form.value.kode_dokter ? parseInt(selected?.harga_jual_resep_k ?? 0) : parseInt(selected?.harga_jual_biasa_k ?? 0)
-  return form.value.kode_dokter ? Math.ceil(resep) : Math.ceil(biasa)
+  // const resep = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_resep ?? 0) / 100)
+  // const biasa = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_biasa ?? 0) / 100)
+  // return form.value.kode_dokter ? Math.ceil(resep) : Math.ceil(biasa)
+  return form.value.kode_dokter ? parseInt(selected?.harga_jual_resep_k ?? 0) : parseInt(selected?.harga_jual_biasa_k ?? 0)
+  
 }
 
 const handleSelectedPelanggan = (item) => {
@@ -626,9 +627,6 @@ const handleSelectedPelanggan = (item) => {
   
 }
 const handleSelectedDokter = (item) => {
-  console.log('dokter', item);
-  
-  
   props.store.dokterSelected = item
   form.value.kode_dokter = item?.kode ?? null
   searchDokter.value = ''
@@ -654,7 +652,7 @@ const handleSelectedBarang = (item) => {
   }
 
   props.store.barangSelected = item
-  console.log('handleSelectedBarang form', item);
+  // console.log('handleSelectedBarang form', item);
   searchBarang.value = ''
   handleFocus(inpJumlahRef)
   
@@ -735,7 +733,7 @@ const simpanPenjualan = async (e) => {
     //   resp = await api.post(`api/v1/transactions/order/unlock-order`, payload)
     // }
 
-    console.log('resp bayar', resp);
+    // console.log('resp bayar', resp);
     modalNota.value = true
   } catch (error) {
     console.log('error', error);
@@ -804,8 +802,8 @@ watch(() => props.store.maxRight, (newMax, oldMax) => {
   // if (!newMax) {
   //   initForm()
   // }
-  console.log('newMax', newMax);
-  console.log('form', form.value);
+  // console.log('newMax', newMax);
+  // console.log('form', form.value);
   
 }, { deep: true })
 
