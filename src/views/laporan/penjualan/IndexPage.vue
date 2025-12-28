@@ -36,7 +36,7 @@
 
    
 
-    <u-view id="printArea" ref="printArea" class="w-full relative print-a4" flex1 scrollY gap="gap-0" padding="p-0">
+    <u-view id="printAreax" ref="printAreax" class="w-full relative print-a4" flex1 scrollY gap="gap-0" padding="p-0">
         <u-view v-if="store.loading" flex1 class="flex items-center justify-center w-full">
           <u-load-spinner />
         </u-view>
@@ -67,7 +67,7 @@
             Periode {{ formatDateIndo(store.params?.from) }} - {{ formatDateIndo(store.params?.to) }}
           </div>
            <div class="pt-2 uppercase text-sm font-bold text-right">
-            TOTAL PENJUALAN : {{ formatRupiah(store?.total) }}
+            TOTAL PENJUALAN : {{ formatRupiah(store?.grand?.total_penjualan) }}
           </div>
         </div>
         
@@ -150,9 +150,9 @@ function getTotal (item) {
 
 
 
-
+const printAreax = ref(null)
 const printObj = {
-  id: '#printArea', // ref elemen yang mau diprint
+  id: '#printAreax', // ref elemen yang mau diprint
   popTitle: 'Laporan Penjualan',
   preview: false,
   extraCss: '',

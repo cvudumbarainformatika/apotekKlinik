@@ -1,7 +1,7 @@
 <template>
   <u-modal persistent :title="`${title}`" @close="emit('close')" size="xl">
     <template #default>
-      <div id="printArea" ref="printArea" class=" max-w-full bg-white text-black mx-auto  p-4 print-a4">
+      <div id="printAreax" ref="printAreax" class=" max-w-full bg-white text-black mx-auto  p-4 print-a4">
         <div class="flex items-start justify-between gap-6">
           <div class="flex items-center gap-4">
             <img src="/images/logo.png" alt="logo" class="w-14 h-14 object-contain" />
@@ -359,10 +359,10 @@ const totalStok = computed(() => {
 
 
 
-const printArea = ref(null)
+const printAreax = ref(null)
 
 const printObj = {
-  id: '#printArea', // ref elemen yang mau diprint
+  id: '#printAreax', // ref elemen yang mau diprint
   popTitle: 'Penerimaan Barang',
   preview: false,
   extraCss: '',

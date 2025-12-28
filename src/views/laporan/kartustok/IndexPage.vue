@@ -1,6 +1,7 @@
 <template>
-  <base-master :title="title" :store="store" :showOpnameButton="true" :showMonthButton="true" :showAddButton="false"
-    :onRange="handleRange" :onRefresh="handleRefresh" :onTriger="handleOpname">
+  <base-master :title="title" :store="store" :showPrint="true" :showOpnameButton="true" :showMonthButton="true"
+    :showPrintButton="true" :showAddButton="false" :onRange="handleRange" :onRefresh="handleRefresh"
+    :onTriger="handleOpname">
     <!-- <template #loading>
       <LoaderItem />
     </template> -->
@@ -12,8 +13,13 @@
         <template #fallback>
           <LoaderItem />
         </template>
+
       </Suspense>
     </template>
+    <template #print>
+      <cetak-data :store="store" :range="dateRange" />
+    </template>
+
     <!-- <template #modal-form>
       <modal-form v-if="store.modalFormOpen" v-model="store.modalFormOpen" :mode="store.item ? 'edit' : 'add'"
         :title="title" :store="store" @close="store.modalFormOpen = false" @save="handleSave" />
@@ -21,6 +27,7 @@
 
   </base-master>
 </template>
+
 
 <script setup>
 import { defineAsyncComponent, onMounted, computed, ref, onBeforeMount } from 'vue'
@@ -31,22 +38,33 @@ import BaseMaster from '@/components/templates/BaseMaster.vue'
 import LoaderItem from './LoaderItem.vue'
 import { api } from '@/services/api'
 import { useNotificationStore } from '@/stores/notification'
+import { useAppStore } from '@/stores/app'
 const $confirm = inject('confirm')
 
 const notify = useNotificationStore().notify
 const ListComp = defineAsyncComponent(() => import('./ListComp.vue'))
+const CetakData = defineAsyncComponent(() => import('./CetakData.vue'))
 const ModalForm = defineAsyncComponent(() => import('./ModalDetail.vue'))
 const store = useKartuStokStore()
 const route = useRoute()
 const title = computed(() => route.meta.title)
 const dateRange = ref({})
+
+const app = useAppStore()
+const company = computed(() => {
+  console.log('app', app?.form)
+  return app?.form
+})
 onMounted(async () => {
   store.per_page = 100
-  Promise.all([
-    handleRange(),
-    getCurrentDate()
-  ])
+  await app.fetchData()
+  // Promise.all([
+  getCurrentDate()
+  await handleRange()
+
+  // ])
 })
+
 // function toLocalDateString(date) {
 //   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
 // }
@@ -75,6 +93,7 @@ const handleRange = async () => {
     q: store.q,
     page: store.page,
     per_page: store.per_page,
+    depo: company.value?.kode_toko
   }
   console.log('params', params);
   store.loading = true

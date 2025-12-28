@@ -15,6 +15,7 @@ export const useLaporanPenjualanStore = defineStore('laporan-penjualan-store', {
       from: getToday(),
       to: getToday(),
     },
+    grand: null,
     meta: null,
     loading: false,
     loadingMore: false,
@@ -65,6 +66,7 @@ export const useLaporanPenjualanStore = defineStore('laporan-penjualan-store', {
         console.log(`resp getList : `, res);
         this.items = res.data.data ?? res.data ?? []
         this.meta = res.data.meta ?? res.meta ?? null
+        this.grand = res.data.grand_total ?? null
         // this.hasMore = this.page < (this.meta?.last_page ?? 1)
       } catch (err) {
         console.log(`error getList : `, err);
