@@ -139,7 +139,7 @@ const generateTahuns = computed(() => {
 
 
 onMounted(() => {
-
+  props.store.q = ''
   if (props?.onRange) {
     if (!props.store.range.start_date) {
       props.store.range.start_date = bulanSekarang

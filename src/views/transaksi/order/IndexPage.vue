@@ -20,25 +20,28 @@
 <script setup>
 import { computed, onMounted } from 'vue'
 import { defineAsyncComponent } from 'vue'
-import { useKategoriStore, useOrderStore } from '@/stores/template/register'
+import { useApotekerStore, useKategoriStore, useOrderStore } from '@/stores/template/register'
 import { useRoute } from 'vue-router'
 const BaseTransaksi = defineAsyncComponent(() => import('@/components/templates/BaseTransaksi.vue'))
 const FormPage = defineAsyncComponent(() => import('./FormPage.vue'))
 const ListPage = defineAsyncComponent(() => import('./ListPage.vue'))
 
 const masterKategori = useKategoriStore()
+const masterApoteker = useApotekerStore()
 const store = useOrderStore()
 const route = useRoute()
 const title = computed(() => route?.meta?.title)
 const today = new Date().toISOString().split('T')[0]
 
 onMounted(() => {
+  store.reset()
   // console.log('Mounted ', title.value);
   store.range.start_date = today
   store.range.end_date = today
   store.per_page = 20
   Promise.all([
     store.fetchAll(),
+    masterApoteker.fetchAll(),
     masterKategori.fetchAll(),
   ])
 })

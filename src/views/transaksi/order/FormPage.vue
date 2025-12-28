@@ -15,6 +15,17 @@
           <u-input v-model="form.nomor_order" label="Nomor Order (Auto)" readonly :error="isError('no_order')"
             :error-message="errorMessage('no_order')" />
         </u-row>
+        <u-row>
+          <u-select label="Apoteker" v-model="form.kode_apoteker" :options="optionApoteker" :error="isError('kode_apoteker')"
+            :error-message="errorMessage('kode_apoteker')" @inputval="cariApoteker" @update:modelValue="(val) => {
+              console.log('val', val);
+              if (!val) {
+                masterApoteker.q = null
+                valApoteker = null
+                masterApoteker.fetchAll()
+              }
+            }" />
+        </u-row>
         <!-- <u-row>
           <u-select label="Kategori" v-model="form.kode_kategori" :options="optionKategori" :error="isError('kategori')"
             :error-message="errorMessage('kategori')" @update:modelValue="(val) => {
@@ -195,7 +206,7 @@ import { ref, computed, nextTick, onMounted, onUnmounted, watch, defineAsyncComp
 import { api } from '@/services/api'
 import { useNotificationStore } from '@/stores/notification'
 import ModalCetak from './ModalCetak.vue'
-import { useKategoriStore } from '@/stores/template/register'
+import { useApotekerStore, useKategoriStore } from '@/stores/template/register'
 const notify = useNotificationStore().notify
 const ListRincian = defineAsyncComponent(() => import('./ListRincian.vue'))
 
@@ -216,7 +227,7 @@ const modalCetak = ref(false)
 const form = ref({
   nomor_order: '',
   tgl_order: '',
-  // kode_user: '',
+  kode_apoteker: '',
   kode_supplier: '',
   kode_kategori: '',
   kode_barang: '',
@@ -227,6 +238,26 @@ const form = ref({
 })
 const masterKategori = useKategoriStore()
 const optionKategori = computed(() => masterKategori?.items?.map(item => ({ label: item?.nama, value: item?.kode })) || [])
+
+
+
+const masterApoteker = useApotekerStore()
+const valApoteker = ref(null)
+const optionApoteker = ref([])
+function cariApoteker(val) {
+  valApoteker.value = val
+  const match = masterApoteker?.items.filter(o => o.nama?.toLowerCase()?.includes(valApoteker.value))
+  if (match.length > 0) optionApoteker.value = match?.map(item => ({ label: item?.nama, value: item?.kode }))
+  else {
+    masterApoteker.q = val
+    masterApoteker.fetchAll()
+  }
+}
+watch(() => masterApoteker?.items, () => {
+  const match = !!valApoteker.value ? masterApoteker?.items.filter(o => o.nama?.toLowerCase()?.includes(valApoteker.value)) : masterApoteker?.items
+  if (match.length > 0) optionApoteker.value = match?.map(item => ({ label: item?.nama, value: item?.kode }))
+}, { immediate: true })
+
 
 const error = computed(() => {
   const err = props.store.error
@@ -425,7 +456,7 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
     form.value = {
       nomor_order: newForm?.nomor_order ?? '',
       tgl_order: newForm?.tgl_order ?? '',
-      // kode_user: newForm?.kode_user,
+      kode_apoteker: newForm?.kode_apoteker ?? '',
       kode_supplier: newForm?.kode_supplier ?? '',
       kode_kategori: newForm?.kode_kategori ?? newForm?.kategori?.kode ?? ''
     }

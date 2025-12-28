@@ -2,7 +2,7 @@
 <template>
   <div class="relative w-full autocomplete-wrapper" ref="wrapperRef">
     <!-- Input -->
-    <input v-model="query" @focus="handleFocus" @input="open = true" @keydown="onKeyDown" :placeholder="placeholder"
+    <input v-model="query" @focus="handleFocus" @input="inputTrue" @keydown="onKeyDown" :placeholder="placeholder"
       class="peer w-full px-4 py-2 pr-10 focus:bg-background border rounded-full focus:outline-none focus:ring-1 transition"
       :class="[
         error ? 'border-danger text-danger focus:ring-danger' : 'border-light-primary text-primary focus:border-primary focus:ring-primary',
@@ -69,7 +69,7 @@ const props = defineProps({
   error: { type: Boolean, default: false },
   errorMessage: { type: String, default: 'Harap diisi' },
 })
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue', 'inputval'])
 
 const wrapperRef = ref(null)
 const query = ref('')
@@ -91,7 +91,12 @@ function splitLabel(label) {
     match: part.toLowerCase() === match
   }))
 }
-
+let cari = ''
+function inputTrue(val) {
+  open.value = true
+  emit('inputval', val?.target?.value)
+  cari = val?.target?.value
+}
 function select(opt, idx) {
   query.value = opt.label
   emit('update:modelValue', opt.value)
