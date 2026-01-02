@@ -7,14 +7,14 @@
         </u-row>
         <u-row flex1 class="w-full">
           <u-row>
-            <u-select label="Satuan Kecil" v-model="form.satuan_k" :options="optionSatuans" :error="isError('satuan_k')"
-              :error-message="errorMessage('satuan_k')" @inputval="cariSatuan" @update:modelValue="(val) => {
+            <u-select label="Satuan Kecil" v-model="form.satuan_k" :options="optionSatuanK" :error="isError('satuan_k')"
+              :error-message="errorMessage('satuan_k')" @inputval="cariSatuanK" @update:modelValue="(val) => {
                 console.log('val', val);
               }" />
           </u-row>
           <u-row>
-            <u-select label="Satuan Besar" v-model="form.satuan_b" :options="optionSatuans" :error="isError('satuan_b')"
-              :error-message="errorMessage('satuan_b')" @inputval="cariSatuan" @update:modelValue="(val) => {
+            <u-select label="Satuan Besar" v-model="form.satuan_b" :options="optionSatuanB" :error="isError('satuan_b')"
+              :error-message="errorMessage('satuan_b')" @inputval="cariSatuanB" @update:modelValue="(val) => {
                 console.log('val', val);
               }" />
           </u-row>
@@ -178,22 +178,45 @@ function init() {
 }
 
 const masterSatuan = useSatuanStore()
-// const optionSatuans = computed(() => masterSatuan?.items?.map(item => ({ label: item?.nama, value: item?.nama })) || [])
-const valSatuan = ref(null)
-const optionSatuans = ref([])
-function cariSatuan(val) {
-  valSatuan.value = val
-  const match = masterSatuan?.items.filter(o => o.nama?.toLowerCase()?.includes(valSatuan.value))
-  if (match.length > 0) optionSatuans.value = match?.map(item => ({ label: item?.nama, value: item?.nama }))
-  else {
-    masterSatuan.q = val
-    masterSatuan.fetchAll()
-  }
+const valSatuanK = ref(null)
+const valSatuanB = ref(null)
+
+const optionSatuanK = ref([])
+const optionSatuanB = ref([])
+function cariSatuanK(val) {
+  valSatuanK.value = val
+
+  const match = masterSatuan.items.filter(o =>
+    o.nama?.toLowerCase().includes(val?.toLowerCase())
+  )
+
+  optionSatuanK.value = match.length
+    ? match.map(i => ({ label: i.nama, value: i.nama }))
+    : masterSatuan.items.map(i => ({ label: i.nama, value: i.nama }))
 }
-watch(() => masterSatuan?.items, () => {
-  const match = !!valSatuan.value ? masterSatuan?.items.filter(o => o.nama?.toLowerCase()?.includes(valSatuan.value)) : masterSatuan?.items
-  if (match.length > 0) optionSatuans.value = match?.map(item => ({ label: item?.nama, value: item?.nama }))
-}, { immediate: true })
+
+function cariSatuanB(val) {
+  valSatuanB.value = val
+
+  const match = masterSatuan.items.filter(o =>
+    o.nama?.toLowerCase().includes(val?.toLowerCase())
+  )
+
+  optionSatuanB.value = match.length
+    ? match.map(i => ({ label: i.nama, value: i.nama }))
+    : masterSatuan.items.map(i => ({ label: i.nama, value: i.nama }))
+}
+
+
+watch(
+  () => masterSatuan.items,
+  (items) => {
+    const mapped = items.map(i => ({ label: i.nama, value: i.nama }))
+    optionSatuanK.value = mapped
+    optionSatuanB.value = mapped
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   console.log('Mounted Form', masterSatuan.items);
