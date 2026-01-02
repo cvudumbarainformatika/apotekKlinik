@@ -462,22 +462,36 @@ function errorMessage(field) {
   return error.value?.[field]?.[0] ?? null
 }
 
-
+const allOrder = ref([])
 const ambilOrder = async () => {
-  await storeorder.fetchAll(params.value)
+  // await storeorder.fetchAll(params.value)
+  // console.log('data lama', storeorder.items)
+  try {
 
-  const datasimpan = props.store.items.map(x => x.noorder)
-  const hasil = storeorder.items.filter(
-    item => !datasimpan.includes(item.nomor_order)
-  )
-  props.store.dataorder = hasil
-
-  // 🧠 jika sudah ada form.noorder, sinkronkan langsung
-  if (props.store.form?.noorder) {
-    const selected = storeorder.items.find(
-      o => o.nomor_order === props.store.form.noorder
+    const res = await api.get(
+      '/api/v1/transactions/penerimaan/get-list-order',
+      { params: params.value }
     )
-    props.store.orderSelected = selected || null
+    allOrder.value = res.data?.data ?? []
+    const datasimpan = props.store.items.map(x => x.noorder)
+    const hasil = allOrder.value.filter(
+      item => !datasimpan.includes(item.nomor_order)
+    )
+    props.store.dataorder = hasil
+
+    // 🧠 jika sudah ada form.noorder, sinkronkan langsung
+    if (props.store.form?.noorder && !props.store.orderSelected) {
+      const selected = allOrder.value.find(
+        o => o.nomor_order === props.store.form.noorder
+      )
+      props.store.orderSelected = selected || null
+    }
+  } catch (error) {
+    console.error('Gagal ambil order:', error)
+    notify({
+      message: 'Gagal mengambil data order',
+      type: 'error'
+    })
   }
 }
 
@@ -791,7 +805,7 @@ watch(
     }
 
     if (newForm) {
-      const filteredOrders = storeorder.items
+      const filteredOrders = allOrder.value
         ?.filter(o => o.nomor_order === newForm?.noorder)
         ?.flatMap(o => o.order_records) || []
       const today = new Date().toISOString().split('T')[0]
@@ -845,8 +859,8 @@ watch(
     if (newForm?.noorder) {
       let order = null
 
-      if (storeorder.items && storeorder.items.length > 0) {
-        order = storeorder.items.find(o => o.nomor_order === newForm.noorder)
+      if (allOrder.value && allOrder.value.length > 0) {
+        order = allOrder.value.find(o => o.nomor_order === newForm.noorder)
       }
 
       // 🔥 Fallback: kalau gak ada di storeorder, ambil dari daftar penerimaan aktif
@@ -863,7 +877,7 @@ watch(
       }
 
       props.store.orderSelected = order || null
-    } else {
+    } else if (!props.store.orderSelected) {
       props.store.orderSelected = null
     }
   },
@@ -912,7 +926,7 @@ onMounted(async () => {
   // console.log('🟢 Form transaksi mounted')
   initForm()
   props.store.dataorder = []
-  storeorder.per_page = 20
+  props.store.per_page = 20
   await ambilOrder()
 })
 

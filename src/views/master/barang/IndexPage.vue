@@ -12,6 +12,7 @@ import LoaderItem from './LoaderItem.vue'
 const ListComp = defineAsyncComponent(() => import('./ListComp.vue'))
 const ModalForm = defineAsyncComponent(() => import('./ModalForm.vue'))
 
+const CetakData = defineAsyncComponent(() => import('./CetakData.vue'))
 
 const store = useBarangStore()
 const masterSatuan = useSatuanStore()
@@ -76,7 +77,7 @@ async function handleDelete(item) {
 </script>
 
 <template>
-  <base-master :title="title" :store="store" showOrder :onAdd="handleAdd" :onRefresh="handleRefresh">
+  <base-master :title="title" :store="store" :showPrintButton="true" showOrder :onAdd="handleAdd" :onRefresh="handleRefresh">
     <template #loading>
       <LoaderItem />
     </template>
@@ -94,7 +95,9 @@ async function handleDelete(item) {
       <modal-form v-if="store.modalFormOpen" v-model="store.modalFormOpen" :mode="store.item ? 'edit' : 'add'"
         :title="title" :store="store" @close="store.modalFormOpen = false" @save="handleSave" />
     </template>
-
+   <template #print>
+      <cetak-data />
+    </template>
 
 
 

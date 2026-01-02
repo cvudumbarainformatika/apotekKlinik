@@ -38,7 +38,7 @@
       <div class="flex items-start justify-between gap-6">
          <div class="mt-3 grid grid-cols-1 gap-x-6 gap-y-1 text-sm">
             <div class="text-gray-500">Apoteker : 
-              <span class="font-medium">{{ data?.apoteker?.nama || '-' }} ({{ data?.apoteker?.kode || '-' }})</span>
+              <span class="font-medium">{{ data?.apoteker?.nama || '-' }} ({{ data?.apoteker?.sipa || '-' }})</span>
             </div>
             
           </div>
