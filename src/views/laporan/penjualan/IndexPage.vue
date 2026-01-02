@@ -87,21 +87,29 @@
           </thead>
           <tbody>
             <template v-for="(item, i) in store.items" :key="i">
-              <tr
-                class="border-b hover:bg-gray-50 transition"
-              >
-                <td class="td font-semibold">Tanggal : {{ formatDateIndo(item?.tgl_penjualan) }} ({{ item?.nopenjualan }})</td>
+              <tr class="border-b hover:bg-gray-50 transition">
+                <td class="td font-semibold">Tanggal : {{ formatDateIndo(item?.tgl_penjualan) }} ({{ item?.nopenjualan
+                  }})</td>
                 <!-- <td class="td font-semibold">{{ item?.nopenjualan }}</td> -->
                 <!-- <td class="td">{{ item.customer }}</td> -->
                 <td class="td text-sm text-right font-semibold ">
-                  Rp. {{ formatRupiah(getTotal(item)) }}
+                  Rp. {{ formatRupiah(getTotal(item)?.subtotal) }} <span v-if="getTotal(item)?.subtotalRetur>0"> - {{formatRupiah(getTotal(item)?.subtotalRetur??0)}} = {{ formatRupiah(getTotal(item)?.subtotal-(getTotal(item)?.subtotalRetur??0)) }}</span> 
+                  <!-- Rp. {{ getTotal(item) }} -->
                 </td>
               </tr>
               <!-- detail item -->
               <tr v-for="(rinci, i) in item?.rinci" :key="i" class="border-b last:border-0">
-                <td class="td text-gray-600">• {{ rinci?.master?.nama }} ({{ rinci?.harga_jual }} x {{ rinci?.jumlah_k }})</td>
+                <td class="td text-gray-600">
+                  <div>• {{ rinci?.master?.nama }} (Rp {{ formatRupiah(rinci?.harga_jual) }} x {{ rinci?.jumlah_k }})
+                  </div>
+                  <div v-if="parseFloat(rinci.retur)>0">
+                    &nbsp;&nbsp; ↳ Retur: {{ rinci.retur }} x Rp
+                    {{ formatRupiah(rinci.harga_jual) }} =
+                    {{ formatRupiah(rinci.subtotal_retur) }}
+                  </div>
+                </td>
                 <!-- <td class="px-4 py-2 text-sm text-gray-600">{{ rinci?.jumlah_k }}</td> -->
-                <td class="td text-right text-gray-600">{{ formatRupiah(rinci?.subtotal) }}</td>
+                <td class="td text-right text-gray-600">{{ formatRupiah(Number(rinci?.subtotal)) }} <span v-if="parseInt(rinci?.subtotal_retur)>0"> - {{ formatRupiah(Number(rinci?.subtotal_retur)) }} = {{formatRupiah(Number(rinci?.subtotal-rinci?.subtotal_retur))}}</span></td>
               </tr>
             </template>
           </tbody>
