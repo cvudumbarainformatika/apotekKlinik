@@ -24,8 +24,8 @@
           </u-row>
         </u-row>
         <u-row flex1 class="w-full">
-          <!-- <u-input v-model="form.kandungan" label="Kandungan" :error="isError('kandungan')"
-            :error-message="errorMessage('kandungan')" /> -->
+          <u-input v-model="form.kandungan" label="Kandungan" :error="isError('kandungan')"
+            :error-message="errorMessage('kandungan')" />
           <u-select label="Kategori" v-model="form.kode_kategori" :options="optionKategori" :error="isError('kode_kategori')"
             :error-message="errorMessage('kode_kategori')" @inputval="cariKategori" @update:modelValue="(val) => {
               console.log('val', val);

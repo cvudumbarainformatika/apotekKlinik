@@ -14,7 +14,7 @@
           <div class="text-right">{{ formatDateIndo(form?.tgl_penjualan) }}</div>
         </div>
         <div class="flex justify-between text-[10px] mt-1">
-          <div>{{ user?.nama || '-' }}</div>
+          <div>{{ getShiftKasir()}}</div>
           <div class="text-right"> Jam : {{ formatTimeOnly(form?.tgl_penjualan) }}</div>
         </div>
         <div class="w-full border-t border-dashed border-black my-1"></div>
@@ -50,9 +50,12 @@
 
         <div class="mt-2 text-center text-[10px] leading-snug">
           <div class="w-full border-t border-dashed border-black my-1"></div>
-          <p class="mt-1">{{ app?.form?.footer || 'Terimakasih atas kunjungan anda' }}</p>
+         
+           <div>Terima Kasih</div>
+           <p class="mt-1">{{ app?.form?.footer}}</p>
           <!-- <p class="opacity-60">Simpan struk ini sebagai bukti transaksi.</p> -->
           <p class="mt-1">&copy; 2025 CV Udumbara Informatika</p>
+          
         </div>
 
       </div>
@@ -88,6 +91,18 @@ const { user } = storeToRefs(auth)
 
 const app = useAppStore()
 
+function getShiftKasir(date = new Date()) {
+  const hour = formatTimeOnly(props.form.tgl_penjualan)
+
+  if (hour >= 7 && hour < 14) {
+    return 'Kasir Pagi'
+  }
+
+  if (hour >= 14 && hour < 21) {
+    return 'Kasir Sore'
+  }
+
+}
 
 const printType = ref('thermal-58') // 'a4' | 'thermal-58 | 'thermal-80' | 'thermal-100'
 

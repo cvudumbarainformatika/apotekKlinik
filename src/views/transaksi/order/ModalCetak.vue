@@ -199,14 +199,112 @@
         </div>
       </div>
 
+
+      <!-- PRINT 2 -->
+      <div v-show="activeView === 'view3'" id="printArea3"
+        class="w-[210mm] h-[148mm] bg-white text-black mx-auto p-4 print-a5">
+        <div class="">
+          <div class="w-full mt-3 text-center">SURAT PESANAN OBAT-OBATAN TERTENTU</div>
+          <div class="flex items-start gap-6">
+            <div class="mt-3 grid grid-cols-1 gap-x-6 gap-y-1 text-sm">
+              <div class="w-ful"> Yang bertanda tangan di bawah ini :</div>
+              <div class="mt-0 grid grid-cols-2 gap-x-2 gap-y-0 text-sm">
+                <div class="">Nama</div>
+                <div class="">: {{ data?.apoteker?.nama || '-' }}</div>
+                <div class="">Jabatan</div>
+                <div class="">: Apoteker Penanggung Jawab</div>
+                <div class="">Nomor SIPA</div>
+                <div class="">: {{ data?.apoteker?.sipa || '-' }}</div>
+                <!-- <div class="text-gray-500">Supplier</div>
+                <div class="font-medium">{{ data?.supplier?.nama || '-' }}</div> -->
+              </div>
+              <div class="w-ful">Mengajukan pesanan obat mengandung prekursor farmasi kepada :</div>
+              <div class="mt-0 grid grid-cols-2 gap-x-2 gap-y-0 text-sm">
+                <div class="">Nama Distributor</div>
+                <div class="">: {{ data?.supplier?.nama || '-' }}</div>
+                <div class="">Alamat</div>
+                <div class="">: Apoteker Penanggung Jawab</div>
+                <div class="">Nomor SIPA</div>
+                <div class="">: {{ data?.supplier?.alamat || '-' }}</div>
+              </div>
+              <div class="w-ful">Jenis obat mengandung prekursor farmasi yang dipesan adalah :</div>
+            </div>
+            <div class="mt-3 grid grid-cols-1 gap-x-6 gap-y-1 text-sm">
+            </div>
+          </div>
+
+          <!-- Items Table -->
+          <div class="mt-2">
+            <table class="w-full text-sm border-separate [border-spacing:0]">
+              <thead>
+                <tr class="text-left">
+                  <th class="th">No</th>
+                  <th class="th">Nama Obat</th>
+                  <th class="th">Zat Aktif Prekursor Farmasi</th>
+                  <th class="th">Bentuk/Kekuatan Sediaan</th>
+                  <th class="th">Satun</th>
+                  <th class="th text-right">Jumlah</th>
+                  <th class="th">Keterangan</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(it, idx) in data?.order_records" :key="idx" class="align-top">
+                  <td class="td text-gray-500">{{ idx + 1 }}</td>
+                  <td class="td">
+                    <div class="font-medium">{{ it?.master?.nama || '-' }}</div>
+                  </td>
+                  <td class="td">{{ it?.master?.kandungan || '-' }}</td>
+                  <td class="td">{{ it?.master?.kesediaan || '-' }}</td>
+                  <td class="td">{{ it?.satuan_b }}</td>
+                  <td class="td text-right">{{ it?.jumlah_pesan || 0 }} {{ it?.satuan_b }}</td>
+                  <td class="td">{{ it?.keterangan || '-' }}</td>
+                </tr>
+                <tr v-if="data?.rincian?.length === 0">
+                  <td class="td text-center text-gray-500" colspan="8">Belum ada item retur.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="w-ful mt-3 text-sm"> Obat mengandung prekursor farmasi tersebut akan digunakan untuk memenuhi
+            kebutuhan
+            :</div>
+          <!-- Totals & Notes -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div class="kiri">
+              <div class="mt-0 grid grid-cols-1 gap-x-6 gap-y-1 text-sm">
+                <div class="mt-0 grid grid-cols-2 gap-x-2 gap-y-0 text-sm">
+                  <div class="">Nama Apotek</div>
+                  <div class="">: {{ company?.nama || 'Belum di setting' }}</div>
+                  <div class="">Alamat Apotek</div>
+                  <div class="">: {{ company?.alamat || 'Belum di setting' }}</div>
+                  <div class="">Nomor SIA</div>
+                  <div class="">: {{ company?.nomor_sia || 'Belum di setting' }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="kanan">
+              <div class="mt-0 grid grid-cols-1 gap-x-6 gap-y-1 text-sm">
+                <div class="mt-9 text-center">Probolinggo, {{ today }} </div>
+                <div class="mt-9 text-center">{{ data?.apoteker?.nama || '-' }}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-6 text-center text-[10px] leading-snug">
+            <div class="w-full border-t border-dashed border-black my-1"></div>
+            <p class="mt-2">&copy; 2025 CV Udumbara Informatika</p>
+          </div>
+        </div>
+      </div>
+
     </template>
 
      <template #footer>
       <u-row flex1 class="w-full" right>
         <u-btn variant="secondary" label="Batal" @click="$emit('close')" />
         <u-btn v-if="activeView === 'view1'" v-print="printreguler" label="Cetak" />
-
         <u-btn v-if="activeView === 'view2'" v-print="printprekursor" label="Cetak" />
+        <u-btn v-if="activeView === 'view3'" v-print="printobatlain" label="Cetak" />
       </u-row>
     </template>
   </u-modal>
@@ -289,6 +387,24 @@ const printreguler = computed(() => ({
 }))
 const printprekursor = computed(() => ({
   id: '#printArea2',
+  popTitle: 'Surat Pesanan',
+  preview: false,
+  extraCss: '',
+  extraHead: '',
+  beforeOpenCallback(vue) {
+    console.log('wait...')
+  },
+  openCallback(vue) {
+    console.log('opened')
+  },
+  closeCallback(vue) {
+    console.log('closePrint')
+    emit('close')
+  }
+}))
+
+const printobatlain = computed(() => ({
+  id: '#printArea3',
   popTitle: 'Surat Pesanan',
   preview: false,
   extraCss: '',
