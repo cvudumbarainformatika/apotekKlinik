@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "8181:80"
+      - "8182:80"
     networks:
       - sa_shared
       - default

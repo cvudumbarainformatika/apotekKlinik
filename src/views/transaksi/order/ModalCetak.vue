@@ -6,6 +6,8 @@
           @click="changeView('view1')" />
         <u-btn size="sm" :variant="activeView === 'view2' ? 'primary' : 'secondary'" label="Prekursor"
           @click="changeView('view2')" />
+          <u-btn size="sm" :variant="activeView === 'view3' ? 'primary' : 'secondary'" label="Obat "
+          @click="changeView('view2')" />
       </div>
 
       <div v-show="activeView === 'view1'" id="printArea1" class="max-w-full bg-white text-black mx-auto p-4 print-a4">
@@ -218,7 +220,7 @@
                 <!-- <div class="text-gray-500">Supplier</div>
                 <div class="font-medium">{{ data?.supplier?.nama || '-' }}</div> -->
               </div>
-              <div class="w-ful">Mengajukan pesanan obat mengandung prekursor farmasi kepada :</div>
+              <div class="w-ful">Mengajukan pesanan obat-obatan tertentu kepada :</div>
               <div class="mt-0 grid grid-cols-2 gap-x-2 gap-y-0 text-sm">
                 <div class="">Nama Distributor</div>
                 <div class="">: {{ data?.supplier?.nama || '-' }}</div>
@@ -227,7 +229,7 @@
                 <div class="">Nomor SIPA</div>
                 <div class="">: {{ data?.supplier?.alamat || '-' }}</div>
               </div>
-              <div class="w-ful">Jenis obat mengandung prekursor farmasi yang dipesan adalah :</div>
+              <div class="w-ful">Jenis obat-obatan tertentu yang dipesan adalah :</div>
             </div>
             <div class="mt-3 grid grid-cols-1 gap-x-6 gap-y-1 text-sm">
             </div>
@@ -265,7 +267,7 @@
               </tbody>
             </table>
           </div>
-          <div class="w-ful mt-3 text-sm"> Obat mengandung prekursor farmasi tersebut akan digunakan untuk memenuhi
+          <div class="w-ful mt-3 text-sm"> Obat tertentu tersebut akan digunakan untuk memenuhi
             kebutuhan
             :</div>
           <!-- Totals & Notes -->
