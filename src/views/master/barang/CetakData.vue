@@ -37,10 +37,10 @@
                         <td class="td p-1 align-top text-left">1 {{ it?.satuan_b }} isi {{ it?.isi }} {{ it?.satuan_k }}
                         </td>
                         <td class="td p-1 align-top text-right"> {{
-                            formatRpkoma(it?.harga_jual_resep) }}
+                            formatRpkoma(it?.harga_jual_resep_k) }}
                         </td>
                         <td class="td p-1 align-top text-right"> {{
-                            formatRpkoma(it?.harga_jual_umum) }}
+                            formatRpkoma(it?.harga_jual_biasa_k) }}
                         </td>
                         <!-- <td class="td p-1 align-top text-left"> {{ formatDateIndo(it?.tgl_exprd) }} </td>
                         <td class="td p-1 align-top text-right font-semibold"> {{ formatRupiah(it?.jumlah_k) }} {{

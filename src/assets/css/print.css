@@ -17,6 +17,12 @@
     margin: 10mm;
   }
 
+  /* Mode A4 */
+  @page print-a5  {
+    size: A5 landscape;
+    margin: 10mm;
+  }
+
   /* Mode Thermal 58mm */
   @page thermal-58  {
     size: 58mm auto;

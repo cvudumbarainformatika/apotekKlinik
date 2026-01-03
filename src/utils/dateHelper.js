@@ -13,6 +13,14 @@ export function formatDateIndo(dateInput) {
   })
 }
 
+export function formatDateIndofull(dateInput) {
+  const date = new Date(dateInput)
+  return date.toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
+}
 
 const monthMap = {
   jan: 0, januari: 0,
