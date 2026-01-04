@@ -1,76 +1,161 @@
 <template>
   <u-modal persistent :title="`${title}`" @close="emit('close')">
     <template #default>
-      <div id="printArea" ref="printArea"
-        class="w-[58mm] max-w-full bg-white text-black mx-auto font-mono p-1 thermal-58">
-        <div class="text-center">
-          <div class="text-sm font-semibold tracking-wide">{{ app?.form?.nama || 'NAMA TOKO' }}</div>
-          <div class="text-[10px] leading-tight">{{ app?.form?.alamat || 'ALAMAT TOKO' }}</div>
-          <div class="text-[10px]">{{ app?.form?.telepon || 'TELEPON TOKO' }}</div>
-          <div class="w-full border-t border-dashed border-black my-1"></div>
-        </div>
-        <div class="flex justify-between text-[10px] mt-1">
-          <div>{{ form?.nopenjualan }}</div>
-          <div class="text-right">{{ formatDateIndo(form?.tgl_penjualan) }}</div>
-        </div>
-        <div class="flex justify-between text-[10px] mt-1">
-          <div>{{ getShiftKasir()}}</div>
-          <div class="text-right"> Jam : {{ formatTimeOnly(form?.tgl_penjualan) }}</div>
-        </div>
-        <div class="w-full border-t border-dashed border-black my-1"></div>
+      <div class="flex gap-2 mb-4">
+        <u-btn size="sm" :variant="activeView === 'view1' ? 'primary' : 'secondary'" label="Apotek"
+          @click="changeView('view1')" />
+        <u-btn size="sm" :variant="activeView === 'view2' ? 'primary' : 'secondary'" label="Klinik"
+          @click="changeView('view2')" />
+      </div>
 
-        <div class="text-[11px]">
-          <div v-for="(it, i) in groupedItems" :key="i" class="py-0.5">
-            <div class="flex justify-between">
-              <span class="pr-2 text-[12px]">{{ it?.nama || '-' }}<span class=""></span></span>
-              <!-- <span>{{ f.rupiah(it.qty * it.price - (it.discount||0)) }}</span> -->
-              <span class="text-[12px]">{{ formatRupiah(it?.subtotal) }}</span>
-            </div>
-            <div class="flex justify-between text-[10px]">
-              <span>{{ it?.jumlah_k }} {{ it?.satuan_k }} x Rp {{ formatRupiah(it?.harga_jual) }}</span>
-              <!-- <span>Disc: -</span> -->
+      <div v-show="activeView === 'view1'" id="printArea1">
+       <div class="w-[58mm] max-w-full bg-white text-black mx-auto font-mono p-1 thermal-58">
+          <div class="text-center">
+            <div class="text-sm font-semibold tracking-wide">{{ app?.form?.nama || 'NAMA TOKO' }}</div>
+            <div class="text-[10px] leading-tight">{{ app?.form?.alamat || 'ALAMAT TOKO' }}</div>
+            <div class="text-[10px]">{{ app?.form?.telepon || 'TELEPON TOKO' }}</div>
+            <div class="w-full border-t border-dashed border-black my-1"></div>
+          </div>
+          <div class="flex justify-between text-[10px] mt-1">
+            <div>{{ form?.nopenjualan }}</div>
+            <div class="text-right">{{ formatDateIndo(form?.tgl_penjualan) }}</div>
+          </div>
+          <div class="flex justify-between text-[10px] mt-1">
+            <div>{{ getShiftKasir() }}</div>
+            <div class="text-right"> Jam : {{ formatTimeOnly(form?.tgl_penjualan) }}</div>
+          </div>
+          <div class="w-full border-t border-dashed border-black my-1"></div>
+
+          <div class="text-[11px]">
+            <div v-for="(it, i) in groupedItems" :key="i" class="py-0.5">
+              <div class="flex justify-between">
+                <span class="pr-2 text-[12px]">{{ it?.nama || '-' }}<span class=""></span></span>
+                <!-- <span>{{ f.rupiah(it.qty * it.price - (it.discount||0)) }}</span> -->
+                <span class="text-[12px]">{{ formatRupiah(it?.subtotal) }}</span>
+              </div>
+              <div class="flex justify-between text-[10px]">
+                <span>{{ it?.jumlah_k }} {{ it?.satuan_k }} x Rp {{ formatRupiah(it?.harga_jual) }}</span>
+                <!-- <span>Disc: -</span> -->
+              </div>
             </div>
           </div>
+
+          <div class="w-full border-t border-dotted border-black my-1"></div>
+
+          <div class="text-[12px]">
+            <!-- <div class="flex justify-between"><span>Subtotal</span><span>5.000.000</span></div> -->
+            <!-- <div class="flex justify-between"><span>Pajak</span><span>20.000</span></div> -->
+            <div class="flex justify-between"><span>Sub Total</span><span>
+                Rp {{ formatRupiah(totalPenjualan) }}</span></div>
+            <div class="flex justify-between"><span>Diskon</span><span>
+                Rp {{ formatRupiah(totalDiskon) }}</span></div>
+            <div class="flex justify-between font-semibold"><span>Total</span><span>
+                Rp {{ formatRupiah(totalPenjualan - totalDiskon) }}</span></div>
+
+            <div class="flex justify-between font-semibold"><span>Bayar ({{ formBayar?.cara_bayar }})</span><span>
+                Rp {{ formatRupiah(formBayar?.jumlah_bayar) }}</span></div>
+            <div class="flex justify-between" :class="{ 'font-semibold': kembali >= 0 }"><span>Kembali</span><span>
+                Rp {{ formatRupiah(kembali) }}</span></div>
+          </div>
+
+
+
+          <div class="mt-2 text-center text-[10px] leading-snug">
+            <div class="w-full border-t border-dashed border-black my-1"></div>
+
+            <p class="mt-1 whitespace-pre-line">{{ app?.form?.footer }}</p>
+            <!-- <p class="opacity-60">Simpan struk ini sebagai bukti transaksi.</p> -->
+            <p class="mt-1">&copy; 2025 CV Udumbara Informatika</p>
+
+          </div>
+
         </div>
-
-        <div class="w-full border-t border-dotted border-black my-1"></div>
-
-        <div class="text-[12px]">
-          <!-- <div class="flex justify-between"><span>Subtotal</span><span>5.000.000</span></div> -->
-          <!-- <div class="flex justify-between"><span>Pajak</span><span>20.000</span></div> -->
-          <div class="flex justify-between font-semibold"><span>Total</span><span>
-              Rp {{ formatRupiah(totalPenjualan) }}</span></div>
-          <div class="flex justify-between"><span>Bayar ({{ formBayar?.cara_bayar }})</span><span>
-              Rp {{ formatRupiah(formBayar?.jumlah_bayar) }}</span></div>
-          <div class="flex justify-between" :class="{ 'font-semibold': kembali >= 0 }"><span>Kembali</span><span>
-              Rp {{ formatRupiah(kembali) }}</span></div>
-        </div>
-
-
-
-        <div class="mt-2 text-center text-[10px] leading-snug">
-          <div class="w-full border-t border-dashed border-black my-1"></div>
-         
-           <div>Terima Kasih</div>
-           <p class="mt-1">{{ app?.form?.footer}}</p>
-          <!-- <p class="opacity-60">Simpan struk ini sebagai bukti transaksi.</p> -->
-          <p class="mt-1">&copy; 2025 CV Udumbara Informatika</p>
-          
-        </div>
-
       </div>
+
+      <div v-show="activeView === 'view2'" id="printArea2">
+       <div class="w-[58mm] max-w-full bg-white text-black mx-auto font-mono p-1 thermal-58">
+          <div class="text-center">
+            <div class="text-sm font-semibold tracking-wide">{{ app?.form?.nama || 'NAMA TOKO' }}</div>
+            <div class="text-[10px] leading-tight">{{ app?.form?.alamat || 'ALAMAT TOKO' }}</div>
+            <div class="text-[10px]">{{ app?.form?.telepon || 'TELEPON TOKO' }}</div>
+            <div class="w-full border-t border-dashed border-black my-1"></div>
+          </div>
+          <div class="flex justify-between text-[10px] mt-1">
+            <div>{{ form?.nopenjualan }}</div>
+            <div class="text-right">{{ formatDateIndo(form?.tgl_penjualan) }}</div>
+          </div>
+          <div class="flex justify-between text-[10px] mt-1">
+            <div>{{ getShiftKasir() }}</div>
+            <div class="text-right"> Jam : {{ formatTimeOnly(form?.tgl_penjualan) }}</div>
+          </div>
+          <div class="w-full border-t border-dashed border-black my-1"></div>
+
+          <!-- <div class="text-[11px]">
+            <div v-for="(it, i) in groupedItems" :key="i" class="py-0.5">
+              <div class="flex justify-between">
+                <span class="pr-2 text-[12px]">{{ it?.nama || '-' }}<span class=""></span></span>
+                <span class="text-[12px]">{{ formatRupiah(it?.subtotal) }}</span>
+              </div>
+              <div class="flex justify-between text-[10px]">
+                <span>{{ it?.jumlah_k }} {{ it?.satuan_k }} x Rp {{ formatRupiah(it?.harga_jual) }}</span>
+              </div>
+            </div>
+          </div> -->
+          <div class="text-[12px]">
+            <!-- <div class="flex justify-between"><span>Subtotal</span><span>5.000.000</span></div> -->
+            <!-- <div class="flex justify-between"><span>Pajak</span><span>20.000</span></div> -->
+            <!-- <div class="flex justify-between"><span>Layanan</span><span>
+                Rp {{ formatRupiah(0) }}</span></div> -->
+            <div class="flex justify-between"><span>Resep</span><span>
+                Rp {{ formatRupiah(totalPenjualan) }}</span></div>
+            
+          </div>
+
+          <div class="w-full border-t border-dotted border-black my-1"></div>
+
+          <div class="text-[12px]">
+            <!-- <div class="flex justify-between"><span>Subtotal</span><span>5.000.000</span></div> -->
+            <!-- <div class="flex justify-between"><span>Pajak</span><span>20.000</span></div> -->
+            <div class="flex justify-between"><span>Sub Total</span><span>
+              Rp {{ formatRupiah(totalPenjualan) }}</span></div>
+            <div class="flex justify-between"><span>Diskon</span><span>
+              Rp {{ formatRupiah(totalDiskon) }}</span></div>
+            <div class="flex justify-between font-semibold"><span>Total</span><span>
+                Rp {{ formatRupiah(totalPenjualan - totalDiskon) }}</span></div>
+            
+            <div class="flex justify-between font-semibold"><span>Bayar ({{ formBayar?.cara_bayar }})</span><span>
+                Rp {{ formatRupiah(formBayar?.jumlah_bayar) }}</span></div>
+            <div class="flex justify-between" :class="{ 'font-semibold': kembali >= 0 }"><span>Kembali</span><span>
+                Rp {{ formatRupiah(kembali) }}</span></div>
+          </div>
+
+
+
+          <div class="mt-2 text-center text-[10px] leading-snug">
+            <div class="w-full border-t border-dashed border-black my-1"></div>
+
+            <p class="mt-1 whitespace-pre-line">{{ app?.form?.footer }}</p>
+            <!-- <p class="opacity-60">Simpan struk ini sebagai bukti transaksi.</p> -->
+            <p class="mt-1">&copy; 2025 CV Udumbara Informatika</p>
+
+          </div>
+
+        </div>
+      </div>
+      
     </template>
     <template #footer>
       <u-row flex1 class="w-full" right>
         <u-btn variant="secondary" label="Batal" @click="$emit('close')" />
-        <u-btn v-print="printObj" label="Cetak" type="button" />
+        <u-btn v-if="activeView === 'view1'" v-print="printapotek" label="Cetak" />
+        <u-btn v-if="activeView === 'view2'" v-print="printklinik" label="Cetak" />
       </u-row>
     </template>
   </u-modal>
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, nextTick } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useAppStore } from '@/stores/app'
 import { storeToRefs } from 'pinia'
@@ -85,11 +170,11 @@ const props = defineProps({
   form : { type: Object, default: null },
 })
 const emit = defineEmits(['close', 'save'])
-
+const app = useAppStore()
 const auth = useAuthStore()
 const { user } = storeToRefs(auth)
+const activeView = ref('view1')
 
-const app = useAppStore()
 
 function getShiftKasir(date = new Date()) {
   const hour = formatTimeOnly(props.form.tgl_penjualan)
@@ -142,17 +227,32 @@ const totalPenjualan = computed(() => {
   return items.reduce((a, b) => a + Number(b?.subtotal), 0)
 })
 
+const totalDiskon = computed(() => {
+  // const items = totalPenjualan.value * (props?.formBayar?.diskon/100)
+  return props?.formBayar?.diskon_rp
+})
+
 const kembali = computed(() => {
-  if (props?.formBayar?.jumlah_bayar < totalPenjualan.value) {
+  if (props?.formBayar?.jumlah_bayar < totalPenjualan.value - totalDiskon.value) {
     return 0
   } 
-  return props.formBayar?.jumlah_bayar - totalPenjualan.value
+  return props.formBayar?.jumlah_bayar - totalPenjualan.value - totalDiskon.value
 })
 
 const printArea = ref(null)
+const canPrint = ref(false)
+watch(activeView, async () => {
+  canPrint.value = false
+  await nextTick()
+  canPrint.value = true
+}, { immediate: true })
 
-const printObj = {
-  id: '#printArea', // ref elemen yang mau diprint
+const changeView = async (view) => {
+  activeView.value = view
+  await nextTick()
+}
+const printapotek = {
+  id: '#printArea1', // ref elemen yang mau diprint
   popTitle: 'Struk Penjualan',
   preview: false,
   extraCss: '',
@@ -164,6 +264,23 @@ const printObj = {
     console.log('opened')
   },
   closeCallback (vue) {
+    console.log('closePrint')
+    emit('close')
+  }
+}
+const printklinik = {
+  id: '#printArea2', // ref elemen yang mau diprint
+  popTitle: 'Struk Klinik',
+  preview: false,
+  extraCss: '',
+  extraHead: '',
+  beforeOpenCallback(vue) {
+    console.log('wait...')
+  },
+  openCallback(vue) {
+    console.log('opened')
+  },
+  closeCallback(vue) {
     console.log('closePrint')
     emit('close')
   }

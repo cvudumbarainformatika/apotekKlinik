@@ -115,7 +115,7 @@
         </u-row>
         <u-row>
           <u-autocomplete ref="searchDokterRef" v-model="searchDokter" placeholder="Cari Dokter" :debounce="300"
-            :min-search-length="2" item-key="id" item-label="nama" not-found-text="Data Dokter tidak ditemukan"
+            :min-search-length="2" item-key="id" item-label="nama_dokter" not-found-text="Data Dokter tidak ditemukan"
             not-found-subtext="Coba kata kunci lain" :show-add-button="false" api-url="/api/v1/master/dokter/get-list"
             api-response-path="data.data" :api-params="{ per_page: 5 }" :use-api="true"
             @select="handleSelectedDokter"></u-autocomplete>
@@ -277,12 +277,16 @@
         <u-separator spacing="my-1"></u-separator>
         <u-row>
           <u-text>Total Penjualan : </u-text>
-          <u-text class="font-bold" size="lg" color="text-light-primary">{{ formatRupiah(totalPenjualan) || 0
+          <u-text class="font-bold" size="lg" color="text-light-primary">{{ formatRupiah(totalPenjualan - totalDiskon) || 0
             }}</u-text>
         </u-row>
         <u-row class="-mt-2">
           <u-text>Total Item : </u-text>
           <u-text class="font-bold" size="lg">{{ groupedItems?.length || 0 }}</u-text>
+        </u-row>
+        <u-row class="-mt-2">
+          <u-text>Diskon : </u-text>
+          <u-text class="font-bold" size="lg">{{ formatRupiah(totalDiskon) || 0 }}</u-text>
         </u-row>
         <u-row class="">
           <u-badge v-if="store.form?.flag" :variant="store.form?.flag ? 'success' : 'warning'">Complete</u-badge>
@@ -291,7 +295,10 @@
         </u-row>
         <u-separator v-if="store.mode === 'edit'" spacing="my-2"></u-separator>
 
-
+        <u-row v-if="store.mode === 'edit'" class="w-full">
+          <u-input v-model.number="formBayar.diskon" label="Diskon (%)" :error-message="errorMessage('diskon')" 
+          :error="isError('diskon')"/>
+        </u-row>
         <!-- Radiogroup container -->
         <div v-if="store.mode === 'edit'" class="grid grid-cols-2 gap-2 mb-2" role="radiogroup" aria-label="Cara Bayar">
           <u-radio v-model="formBayar.cara_bayar" value="TUNAI" label="TUNAI" />
@@ -474,6 +481,7 @@ function handleKeydown(e) {
 }
 const formBayar = ref({
     diskon: 0,
+    diskon_rp: 0,
     jumlah_bayar: 0,
     cara_bayar: 'TUNAI'
 })
@@ -500,6 +508,7 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
     }
 
     formBayar.value.diskon = newForm?.diskon || 0
+    formBayar.value.diskon_rp = newForm?.diskon_rp || 0
     formBayar.value.jumlah_bayar = newForm?.jumlah_bayar || 0
     formBayar.value.cara_bayar = newForm?.cara_bayar || 'TUNAI'
 
@@ -530,18 +539,24 @@ function errorMessage(field){
 
 const totalPenjualan = computed(() => {
   const items = props?.store?.form?.rinci ?? []
-  return items.reduce((a, b) => a + Number(b?.subtotal), 0)
+  const totalitem = items.reduce((a, b) => a + Number(b?.subtotal), 0)
+  return totalitem
 })
 
+const totalDiskon = computed(() => {
+  const items = totalPenjualan.value * (formBayar.value.diskon/100)
+    // const items = formBayar.value.diskon_rp
+  return items
+})
 const kembali = computed(() => {
-  if (formBayar.value.jumlah_bayar < totalPenjualan.value) {
+  if (formBayar.value.jumlah_bayar < totalPenjualan.value - totalDiskon.value) {
     return 0
   } 
-  return formBayar.value.jumlah_bayar - totalPenjualan.value
+  return formBayar.value.jumlah_bayar - totalPenjualan.value - totalDiskon.value
 })
 
 const errorPembayaran = computed(() => {
-  return formBayar.value.jumlah_bayar < totalPenjualan.value
+  return formBayar.value.jumlah_bayar < (totalPenjualan.value - totalDiskon.value)
 })
 
 const groupedItems = computed(() => {
