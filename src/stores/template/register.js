@@ -98,7 +98,15 @@ export const usePenjualanStore = createTemplateTransaksiStore('penjualan', {
 export const useStockStore = createTemplateTransaksiStore('stok', {
   baseUrl: '/api/v1/transactions/stok',
   // createUrl: '/tambah',
-  persist: false
+  persist: false,
+  order_by: 'nama',
+  sort: 'asc',
+  order: 'Nama Obat',
+  orders: [
+          { key: 'nama', sort: 'asc', label: 'Nama Obat' },
+          { key: 'created_at', sort: 'desc', label: 'Terbaru' },
+          { key: 'created_at', sort: 'asc', label: 'Terlama' },
+        ],
 })
 
 export const useReturPembelianStore = createTemplateTransaksiStore('retur-pembelian', {
@@ -121,7 +129,15 @@ export const useReturPenjualanStore = createTemplateTransaksiStore('retur-penjua
 export const useKartuStokStore = createTemplateTransaksiStore('kartu-stok', {
   baseUrl: 'api/v1/transactions/stok',
   createUrl: '/get-kartu-stok',
-  persist: false
+  persist: false,
+  order_by: 'nama',
+  sort: 'asc',
+  order: 'Nama Obat',
+  orders: [
+          { key: 'nama', sort: 'asc', label: 'Nama Obat' },
+          { key: 'created_at', sort: 'desc', label: 'Terbaru' },
+          { key: 'created_at', sort: 'asc', label: 'Terlama' },
+        ],
 })
 
 

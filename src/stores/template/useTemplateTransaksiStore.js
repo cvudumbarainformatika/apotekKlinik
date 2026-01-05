@@ -32,9 +32,15 @@ export function createTemplateTransaksiStore(storeId, config) {
       per_page: 10,
       total: 0,
       q: '',
-      order_by: 'created_at',
-      sort: 'desc',
-
+      order_by: config.order_by || 'created_at',
+      sort: config.sort || 'desc',
+      order: config.order || 'Nama',
+      orders: config.orders || 
+        [
+          { key: 'nama', sort: 'asc', label: 'Nama' },
+          { key: 'created_at', sort: 'desc', label: 'Terbaru' },
+          { key: 'created_at', sort: 'asc', label: 'Terlama' },
+        ],
       range:{
         start_date: null,
         end_date: null
@@ -211,6 +217,15 @@ export function createTemplateTransaksiStore(storeId, config) {
         this.fetchAll()
       },
 
+      setOrder(label) {
+        const res = this.orders?.find(o => o?.label === label)
+        // console.log('sort', res);
+        
+        this.order_by = res?.key
+        this.sort = res?.sort
+        // this.sort = sort
+        this.fetchAll()
+      },
       setRange(val) {
         // console.log('range', val);
         

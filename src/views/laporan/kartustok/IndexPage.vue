@@ -1,6 +1,6 @@
 <template>
   <base-master :title="title" :store="store" :showPrint="true" :showOpnameButton="true" :showMonthButton="true"
-    :showPrintButton="true" :showAddButton="false" :onRange="handleRange" :onRefresh="handleRefresh"
+    :showPrintButton="true" :showAddButton="false" :onRange="handleRange" :onRefresh="handleRefresh" showOrder
     :onTriger="handleOpname">
     <!-- <template #loading>
       <LoaderItem />
