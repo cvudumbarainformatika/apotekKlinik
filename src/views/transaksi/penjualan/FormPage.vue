@@ -552,7 +552,7 @@ const kembali = computed(() => {
   if (formBayar.value.jumlah_bayar < totalPenjualan.value - totalDiskon.value) {
     return 0
   } 
-  return formBayar.value.jumlah_bayar - totalPenjualan.value - totalDiskon.value
+  return formBayar.value.jumlah_bayar - totalPenjualan.value + totalDiskon.value
 })
 
 const errorPembayaran = computed(() => {

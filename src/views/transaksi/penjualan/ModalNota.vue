@@ -229,14 +229,14 @@ const totalPenjualan = computed(() => {
 
 const totalDiskon = computed(() => {
   // const items = totalPenjualan.value * (props?.formBayar?.diskon/100)
-  return props?.formBayar?.diskon_rp
+  return Number(props?.formBayar?.diskon_rp)
 })
 
 const kembali = computed(() => {
   if (props?.formBayar?.jumlah_bayar < totalPenjualan.value - totalDiskon.value) {
     return 0
   } 
-  return props.formBayar?.jumlah_bayar - totalPenjualan.value - totalDiskon.value
+  return props.formBayar?.jumlah_bayar - totalPenjualan.value + totalDiskon.value
 })
 
 const printArea = ref(null)
