@@ -55,21 +55,21 @@
             </thead>
             <tbody>
               <tr v-for="(item, index) in groupedItems" :key="index">
-                <td class="td p-1 text-left">{{ formatDateIndo(item?.tanggal) }}</td>
-                <td class="td p-1 text-left">{{ item?.notrans || '-' }}</td>
-                <td class="td p-1 text-left">
+                <td class="td p-1 text-left align-top">{{ formatDateIndo(item?.tanggal) }}</td>
+                <td class="td p-1 text-left align-top">{{ item?.notrans || '-' }}</td>
+                <td class="td p-1 text-left align-top">
                   <div class="font-semibold">{{ item?.jenis || '-' }}</div>
-                  <div v-if="!store.items.stok_awal">
+                  <div v-if="item.jenis !== 'SALDO AWAL'">
                     <div class="pl-1">Harga Beli Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
                     <div class="pl-1">Harga Resep Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
                     <div class="pl-1">Harga Umum Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
                   </div>
                 </td>
-                <td class="td p-1 text-left">{{ item?.ket || '-' }}</td>
+                <td class="td p-1 text-left align-top">{{ item?.ket || '-' }}</td>
                 <!-- <td class="td p-1 text-right">{{ formatRpkoma(item?.hargabeli) }}</td> -->
-                <td class="td p-1 text-right">{{ formatRupiah(item?.debit) }}</td>
-                <td class="td p-1 text-right">{{ formatRupiah(item?.kredit) }}</td>
-                <td class="td p-1 text-right">{{ formatRupiah(item?.saldo) }}</td>
+                <td class="td p-1 text-right align-top">{{ formatRupiah(item?.debit) }}</td>
+                <td class="td p-1 text-right align-top">{{ formatRupiah(item?.kredit) }}</td>
+                <td class="td p-1 text-right align-top">{{ formatRupiah(item?.saldo) }}</td>
               </tr>
               <tr>
                 <td colspan="6" class="td p-1 text-right font-bold">SALDO AKHIR</td>
