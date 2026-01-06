@@ -73,7 +73,7 @@ onMounted(() => {
     //     store.fetchAll()
     // ])
 })
-
+const dataorder = ref([])
 const pilihOrder = async () => {
     props.store.loading = true
     try {
@@ -83,14 +83,17 @@ const pilihOrder = async () => {
                 params: {
                     q: props.store.q,
                     per_page: 20,
+                    // from: getYearStartDate(),
+                    // to: getYearEndDate(),
+                    flag: '1'
                 },
             }
         )
 
-        props.store.dataorder = resp.data?.data || []
+        dataorder.value = resp.data?.data || []
     } catch (e) {
         console.error(e)
-        props.store.dataorder = []
+        dataorder.value = []
     } finally {
         props.store.loading = false
     }
@@ -100,7 +103,7 @@ watch(
     (val) => {
         // optional: minimal 2 huruf
         if (!val || val.length < 2) {
-            props.store.dataorder = []
+            dataorder.value = []
             return
         }
         pilihOrder()
