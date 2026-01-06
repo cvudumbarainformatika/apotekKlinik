@@ -158,6 +158,29 @@ export function createTemplateTransaksiStore(storeId, config) {
         }
       },
 
+      async fetchOrder(extraParams = {}) {
+        this.loading = true
+        try {
+          const params = {
+            page: this.page,
+            per_page: this.per_page,
+            q: this.q,
+            flag: '1',
+            ...extraParams
+          }
+          const res = await api.get(`/api/v1/transactions/penerimaan/get-list-order`, { params })
+          console.log(`resp ${storeId} header getList : `, res);
+          // this.items = []
+          this.dataorder = res.data.data ?? res.data ?? []
+
+        } catch (err) {
+          console.log(`error ${storeId} getList : `, err);
+          this.error = err
+        } finally {
+          this.loading = false
+        }
+      },
+
       init(){
         this.form = null
         this.range.from = getToday()
@@ -215,6 +238,11 @@ export function createTemplateTransaksiStore(storeId, config) {
         this.search = term
         this.page = 1
         this.fetchAll()
+      },
+      setOrderpenerimaan(term) {
+        this.search = term
+        this.page = 1
+        this.fetchOrder()
       },
 
       setOrder(label) {

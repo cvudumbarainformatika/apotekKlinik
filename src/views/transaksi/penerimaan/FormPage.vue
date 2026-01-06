@@ -351,52 +351,10 @@ const optionJenispajaks = computed(() => [
 const params = computed(() => ({
   from: getYearStartDate(),
   to: getYearEndDate(),
-  flag: '1'
+  flag: '1',
+  page: '1',
+  per_page: '200'
 }))
-
-// listItems used in template: prefer local form.rincian when present, otherwise build from orderSelected.order_records
-// const listItems = computed(() => {
-//   const rincianLocal = form.value.rincian || {}
-//   const orderSelected = props.store.orderSelected || {}
-//   const orderRecords = orderSelected.order_records || orderSelected.rincians || orderSelected.rincian || []
-
-//  console.log('🔄 listItems recomputed', { rincianLocal, orderRecords })
-//   if (Object.keys(rincianLocal).length > 0) {
-//     return Object.values(rincianLocal)
-//   }
-//   console.log('orderRecords empty', orderRecords)
-//   if (orderRecords.length > 0) {
-
-
-//     return orderRecords.map(item => {
-//       console.log('Mapping orderRecord item:', item)
-//       const isiVal = parseInt(item.isi ?? item.barang?.isi, 1)
-//       const jumlahPesan = parseInt(item.jumlah_k, 0)
-//       const jumlahB = parseInt(item.jumlah_b)
-//       const jumlahK = jumlahB * isiVal
-//       return {
-//         nopenerimaan: item.nopenerimaan,
-//         nama: item.barang?.nama || item.nama || '',
-//         jumlah_pesan: jumlahPesan,
-//         jumlah_b: jumlahB,
-//         harga_b: parseFloat(item.harga_b || 0),
-//         nobatch: item.nobatch || '',
-//         diskon_persen: parseFloat(item.diskon_persen || 0),
-//         satuan_b: item.satuan_b || item.barang?.satuan_b || '',
-//         satuan_k: item.satuan_k || item.barang?.satuan_k || '',
-//         isi: isiVal,
-//         jumlah_k: jumlahK,
-//         kode_barang: item.kode_barang,
-//         pajak_rupiah: parseFloat(item.pajak_rupiah || 0),
-//         diskon_rupiah: parseFloat(item.diskon_rupiah || 0),
-//         loading: false,
-//         master: item.barang || null,
-//       }
-//     })
-//   }
-//   // fallback terakhir kalau semua kosong
-//   return []
-// })
 
 
 const listItems = computed(() => {
@@ -499,6 +457,7 @@ function initForm() {
   props.store.mode = 'add'
   props.store.init()
   const today = new Date().toISOString('id-ID').split('T')[0]
+  props.store.q = ''
   form.value = {
     tgl_penerimaan: today,
     tgl_faktur: today,
@@ -524,6 +483,7 @@ function initForm() {
     diskon_heder: 0,
     rincian: {},
   }
+  // ambilOrder()
 }
 
 
