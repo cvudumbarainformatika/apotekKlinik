@@ -1,7 +1,6 @@
 <template>
   <u-col class="w-full pb-4 pt-1 px-2 relative">
     <u-grid cols="6">
-
       <!-- HEADER 1 -->
       <u-card class="col-span-2 h-full min-h-[100px] space-y-2">
         <u-row>
@@ -791,6 +790,7 @@ onMounted(() => {
 
 function initForm(){
   const today = new Date().toISOString().split('T')[0];
+  form.value.tgl_penjualan = null
   form.value.tgl_order = today
   form.value.nomor_order = ''
   props.store.init()
