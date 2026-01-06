@@ -524,7 +524,7 @@ function initForm() {
     diskon_heder: 0,
     rincian: {},
   }
-  // ambilOrder()
+  ambilOrder()
 }
 
 

@@ -4,7 +4,7 @@
             <u-row flex1 class="w-full justify-between">
                 <u-row padding="p-3" class="w-full">
                     <slot name="search">
-                        <u-input-search v-model="props.store.q" @update:modelValue="props.store.setSearch"
+                        <u-input-search v-model="props.store.q" 
                             :debounce="300" />
                     </slot>
                 </u-row>
@@ -51,9 +51,10 @@
     </u-modal>
 </template>
 <script setup>
+import { api } from '@/services/api'
 import { formatDateIndo, useWaktuLaluReactive } from '@/utils/dateHelper'
 // import { useOrderStore } from '@/stores/template/register'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const emit = defineEmits(['close', 'save'])
 const props = defineProps({
@@ -73,8 +74,38 @@ onMounted(() => {
     // ])
 })
 
+const pilihOrder = async () => {
+    props.store.loading = true
+    try {
+        const resp = await api.get(
+            '/api/v1/transactions/penerimaan/get-list-order',
+            {
+                params: {
+                    q: props.store.q,
+                    per_page: 20,
+                },
+            }
+        )
 
-
+        props.store.dataorder = resp.data?.data || []
+    } catch (e) {
+        console.error(e)
+        props.store.dataorder = []
+    } finally {
+        props.store.loading = false
+    }
+}
+watch(
+    () => props.store.q,
+    (val) => {
+        // optional: minimal 2 huruf
+        if (!val || val.length < 2) {
+            props.store.dataorder = []
+            return
+        }
+        pilihOrder()
+    }
+)
 const handlePilih = (item) => {
     // props.store.initModeEdit(item)
     props.store.orderSelected = item
@@ -82,6 +113,6 @@ const handlePilih = (item) => {
     props.store.supplierSelected = item?.supplier
     console.log('Pilih item: ', props.store.orderSelected.order_records);
     emit('close', item)
-    
+    props.store.q = ''
 }
 </script>

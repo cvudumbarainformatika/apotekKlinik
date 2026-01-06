@@ -615,6 +615,7 @@ const handleAdd = async(item) => {
   form.value.tgl_exprd = item?.tgl_exprd ?? null
   form.value.id_stok = item?.id ?? null
   form.value.hpp = parseFloat(selected?.hpp)
+  console.log('formvalue ', form.value)
   if (form.value.harga_jual < form.value.harga_beli) {
     return notify({ message: 'Harga Jual Lebih Kecil dari Harga Beli', type: 'error' })
   }
