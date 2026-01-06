@@ -59,11 +59,17 @@
                 <td class="td p-1 text-left align-top">{{ item?.notrans || '-' }}</td>
                 <td class="td p-1 text-left align-top">
                   <div class="font-semibold">{{ item?.jenis || '-' }}</div>
-                  <div v-if="item.jenis !== 'SALDO AWAL'">
+                  <div v-if="item.jenis === 'SALDO AWAL' || item.jenis === 'PENERIMAAN' || item.jenis === 'RETUR PEMBELIAN'">
                     <div class="pl-1">Harga Beli Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
-                    <div class="pl-1">Harga Resep Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
-                    <div class="pl-1">Harga Umum Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
+                    <!-- <div class="pl-1">Harga Resep Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
+                    <div class="pl-1">Harga Umum Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div> -->
                   </div>
+                   <div v-else-if="item.jenis == 'PENJUALAN' || item.jenis == 'RETUR PENJUALAN'">
+                    <div class="pl-1">Harga Jual Rp {{ formatRpkoma(item?.hargajual || 0) }}</div>
+                    <!-- <div class="pl-1">Harga Resep Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div>
+                    <div class="pl-1">Harga Umum Rp {{ formatRpkoma(item?.hargabeli || 0) }}</div> -->
+                  </div>
+                  
                 </td>
                 <td class="td p-1 text-left align-top">{{ item?.ket || '-' }}</td>
                 <!-- <td class="td p-1 text-right">{{ formatRpkoma(item?.hargabeli) }}</td> -->
@@ -242,7 +248,7 @@ const groupedItems = computed(() => {
       notrans: item.nopenjualan,
       tanggal: item.tgl_penjualan,
       satuan: props.store?.item?.satuan_k,
-      hargabeli: Number(item.harga_beli ?? 0),
+      hargajual: Number(item.harga_jual ?? 0),
       debit: 0,
       kredit: Number(item.jumlah_k ?? 0),
       saldo: 0,
@@ -290,7 +296,7 @@ const groupedItems = computed(() => {
       notrans: item.noretur,
       tanggal: item.tgl_retur,
       satuan: props.store?.item?.satuan_k,
-      hargabeli: Number(item.harga_beli ?? 0),
+      hargajual: Number(item.harga_jual ?? 0),
       debit: Number(item.jumlah_k ?? 0),
       kredit: 0,
       saldo: 0,
