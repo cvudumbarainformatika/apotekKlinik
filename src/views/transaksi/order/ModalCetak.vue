@@ -6,8 +6,8 @@
           @click="changeView('view1')" />
         <u-btn size="sm" :variant="activeView === 'view2' ? 'primary' : 'secondary'" label="Prekursor"
           @click="changeView('view2')" />
-          <u-btn size="sm" :variant="activeView === 'view3' ? 'primary' : 'secondary'" label="Obat "
-          @click="changeView('view2')" />
+          <u-btn size="sm" :variant="activeView === 'view3' ? 'primary' : 'secondary'" label="Obat Tertentu"
+          @click="changeView('view3')" />
       </div>
 
       <div v-show="activeView === 'view1'" id="printArea1" class="max-w-full bg-white text-black mx-auto p-4 print-a4">
@@ -128,8 +128,6 @@
                 <div class="">Nama Distributor</div>
                 <div class="">: {{ data?.supplier?.nama || '-' }}</div>
                 <div class="">Alamat</div>
-                <div class="">: Apoteker Penanggung Jawab</div>
-                <div class="">Nomor SIPA</div>
                 <div class="">: {{ data?.supplier?.alamat || '-' }}</div>
               </div>
               <div class="w-ful">Jenis obat mengandung prekursor farmasi yang dipesan adalah :</div>
@@ -224,8 +222,6 @@
               <div class="mt-0 grid grid-cols-2 gap-x-2 gap-y-0 text-sm">
                 <div class="">Nama Distributor</div>
                 <div class="">: {{ data?.supplier?.nama || '-' }}</div>
-                <div class="">Alamat</div>
-                <div class="">: Apoteker Penanggung Jawab</div>
                 <div class="">Nomor SIPA</div>
                 <div class="">: {{ data?.supplier?.alamat || '-' }}</div>
               </div>
