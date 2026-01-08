@@ -26,7 +26,7 @@
 
           <u-col align="items-end" gap="gap-0" class="" padding="p-0">
             <u-text color="text-gray-500" style="font-size: 10px !important;">{{ useWaktuLaluReactive(item?.created_at) }}</u-text>
-            <u-text class="font-bold" size="md" color="text-primary"><span class="text-xs font-light">Rp. </span>{{ formatRupiah(getTotal(item?.rinci)) }}</u-text>
+            <u-text class="font-bold" size="md" color="text-primary"><span class="text-xs font-light">Rp. </span>{{ formatRupiah(getTotal(item?.rinci) - Number(item?.diskon_rp)) }}</u-text>
             <u-badge class="mt-1 -mr-1" :variant="item?.flag ? 'success' : 'warning'" size="xs">{{ item?.flag ? 'Complete' : 'Draft' }}</u-badge>
           </u-col>
         </u-row>
