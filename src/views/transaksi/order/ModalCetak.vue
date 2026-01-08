@@ -107,7 +107,7 @@
 
 
       <!-- PRINT 2 -->
-      <div v-show="activeView === 'view2'" id="printArea2" class="w-[210mm] h-[148mm] bg-white text-black mx-auto p-4 print-a5">
+      <div v-show="activeView === 'view2'" id="printArea2" class="w-[210mm] bg-white text-black mx-auto p-4 print-a5">
         <div class="">
           <div class="w-full mt-3 text-center">SURAT PESANAN OBAT MENGANDUNG PREKURSOR FARMASI</div>
           <div class="flex items-start gap-6">
@@ -202,7 +202,7 @@
 
       <!-- PRINT 2 -->
       <div v-show="activeView === 'view3'" id="printArea3"
-        class="w-[210mm] h-[148mm] bg-white text-black mx-auto p-4 print-a5">
+        class="w-[210mm] bg-white text-black mx-auto p-4 print-a5">
         <div class="">
           <div class="w-full mt-3 text-center">SURAT PESANAN OBAT-OBATAN TERTENTU</div>
           <div class="flex items-start gap-6">
