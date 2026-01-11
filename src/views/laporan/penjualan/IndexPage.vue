@@ -39,7 +39,7 @@
 
    
 
-    <u-view id="printAreax" ref="printAreax" class="w-full relative print-a4" flex1 scrollY gap="gap-0" padding="p-0">
+    <u-view id="printAreax" class="w-full relative print-a4" flex1 scrollY gap="gap-0" padding="p-0">
         <u-view v-if="store.loading" flex1 class="flex items-center justify-center w-full">
           <u-load-spinner />
         </u-view>
@@ -72,6 +72,8 @@
            <div class="pt-2 uppercase text-sm font-bold text-right">
             TOTAL PENJUALAN : {{ formatRupiah(store?.grand?.total_penjualan) }}
           </div>
+          
+
         </div>
         
       </div>
@@ -88,12 +90,12 @@
           <tbody>
             <template v-for="(item, i) in store.items" :key="i">
               <tr class="border-b hover:bg-gray-50 transition">
-                <td class="td font-semibold">Tanggal : {{ formatDateIndo(item?.tgl_penjualan) }} ({{ item?.nopenjualan
-                  }})</td>
+                <td class="td font-semibold">Tanggal : {{ formatDateIndo(item?.tgl_penjualan) }} ({{ item?.nopenjualan }})
+                </td>
                 <!-- <td class="td font-semibold">{{ item?.nopenjualan }}</td> -->
                 <!-- <td class="td">{{ item.customer }}</td> -->
                 <td class="td text-sm text-right font-semibold ">
-                  Rp. {{ formatRupiah(getTotal(item)?.subtotal) }} <span v-if="getTotal(item)?.subtotalRetur>0"> - {{formatRupiah(getTotal(item)?.subtotalRetur??0)}} = {{ formatRupiah(getTotal(item)?.subtotal-(getTotal(item)?.subtotalRetur??0)) }}</span> 
+                  Rp. {{ formatRupiah(getTotal(item) - item?.diskon_rp) }} <span v-if="getTotal(item)?.subtotalRetur > 0"> - {{formatRupiah(getTotal(item)?.subtotalRetur??0)}} = {{ formatRupiah(getTotal(item)-Number(item?.diskon_rp)-(getTotal(item)?.subtotalRetur??0)) }}</span> 
                   <!-- Rp. {{ getTotal(item) }} -->
                 </td>
               </tr>
@@ -107,13 +109,17 @@
                     {{ formatRupiah(rinci.harga_jual) }} =
                     {{ formatRupiah(rinci.subtotal_retur) }}
                   </div>
+                  <div v-if="Number(item.diskon_rp) > 0">
+                    &nbsp;&nbsp; ↳ Diskon: Rp. {{ formatRupiah((Number(rinci?.subtotal) * Number(item.diskon / 100))) }}
+                  </div>
                 </td>
                 <!-- <td class="px-4 py-2 text-sm text-gray-600">{{ rinci?.jumlah_k }}</td> -->
-                <td class="td text-right text-gray-600">{{ formatRupiah(Number(rinci?.subtotal)) }} <span v-if="parseInt(rinci?.subtotal_retur)>0"> - {{ formatRupiah(Number(rinci?.subtotal_retur)) }} = {{formatRupiah(Number(rinci?.subtotal-rinci?.subtotal_retur))}}</span></td>
+                <td class="td text-right text-gray-600">{{ formatRupiah(Number(rinci?.subtotal) - (Number(rinci?.subtotal) * Number(item.diskon/100))) }} <span v-if="parseInt(rinci?.subtotal_retur)>0"> - {{ formatRupiah(Number(rinci?.subtotal_retur)) }} = {{formatRupiah(Number(rinci?.subtotal-rinci?.subtotal_retur)- (Number(rinci?.subtotal) * Number(item.diskon / 100)))}}</span></td>
               </tr>
             </template>
           </tbody>
         </table>
+       
       </div>
     </u-view>
     
@@ -162,11 +168,11 @@ function getTotal (item) {
 
   return subtotal
 }
+function getDiskon(item) {
+  
+  return item.diskon/100
+}
 
-
-
-
-const printAreax = ref(null)
 const printObj = {
   id: '#printAreax', // ref elemen yang mau diprint
   popTitle: 'Laporan Penjualan',
