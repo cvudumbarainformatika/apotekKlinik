@@ -70,7 +70,7 @@
             Periode {{ formatDateIndo(store.params?.from) }} - {{ formatDateIndo(store.params?.to) }}
           </div>
            <div class="pt-2 uppercase text-sm font-bold text-right">
-            TOTAL PENJUALAN : {{ formatRupiah(store?.grand?.total_penjualan) }}
+            TOTAL PENJUALAN : {{ formatRupiah(store?.grand?.total_penjualan - getDiskon()) }}
           </div>
           
 
@@ -169,8 +169,13 @@ function getTotal (item) {
   return subtotal
 }
 function getDiskon(item) {
-  
-  return item.diskon/100
+  let subtotal = 0
+  store.items?.forEach((r) => {
+    subtotal += parseInt(r?.diskon_rp)
+  })
+
+
+  return subtotal
 }
 
 const printObj = {
