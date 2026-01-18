@@ -2,7 +2,7 @@
     <u-view padding="0" flex1 class="w-full flex-wrap">
         <div class="flex w-full items-start justify-between gap-6 mb-3">
             <div class="flex items-center gap-4">
-                <img src="/images/logo.svg" alt="logo" class="w-14 h-14 object-contain" />
+                <img src="/images/logo.png" alt="logo" class="w-14 h-14 object-contain" />
                 <div>
                     <div class="text-xl font-semibold tracking-wide">{{ company?.nama || 'Nama Toko nya' }}</div>
                     <p class="text-sm text-gray-600">
@@ -32,7 +32,7 @@
                 </tr>
             </thead>
             <tbody>
-                <template v-for="(it, index) in store.items" :key="index">
+                <template v-for="(it, index) in items" :key="it.id">
                     <tr>
                         <!-- <td class="td p-1 align-top text-left">{{ it?.nopenerimaan }}</td> -->
                         <td class="td p-1 align-top text-left"> {{ index+1 }} </td>
@@ -69,6 +69,7 @@ const props = defineProps({
     store: { type: Object, required: true },
     item: { type: Object, default: null },
     range: { type: Object, default: null },
+    items: { type: Array, required: true }
 })
 // const ModalDetail = defineAsyncComponent(() => import('./ModalDetail.vue'))
 // const openModalDetail = ref(false)

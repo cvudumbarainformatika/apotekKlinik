@@ -119,12 +119,12 @@
     </u-view>
     
     <u-view>
-      <Pagination
-        v-if="store?.meta"
-        :total-items="store?.meta?.total"
-        :per-page="store.params.per_page"
-        v-model:currentPage="store.params.page"
-      />
+      <Pagination v-if="store?.meta" v-model:currentPage="store.params.page" :total-items="store?.meta?.total"
+        :per-page="store.params.per_page" @update:current-page="(val) => {
+          // console.log('page', val);
+          store.params.page = val
+          store.fetchData()
+        }" />
     </u-view>
 
     
