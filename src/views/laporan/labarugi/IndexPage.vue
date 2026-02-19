@@ -216,7 +216,15 @@ const app = useAppStore()
 
 onMounted(store.fetchData)
 
+function getDiskon(item) {
+  let subtotal = 0
+  store.items?.rincianPenjualan?.forEach((r) => {
+    subtotal += parseInt(r?.diskon_rp)
+  })
 
+
+  return subtotal
+}
 
 
 const printObj = {

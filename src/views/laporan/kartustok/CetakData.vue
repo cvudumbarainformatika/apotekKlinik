@@ -68,8 +68,8 @@ const props = defineProps({
 // const ModalDetail = defineAsyncComponent(() => import('./ModalDetail.vue'))
 // const openModalDetail = ref(false)
 onMounted(() => {
-    const items = props.store.items
-    console.log('items props', items)
+    // const items = props.store?.items
+    // console.log('items props', items)
     // if (props.range) {
     //   fetchDetail()
     // }
@@ -94,15 +94,15 @@ const bulans = computed(() => [
     { label: 'Desember', value: '12' },
 ])
 const periode = computed(() => {
-    const bulanObj = bulans.value.find(b => b.value === props.store.range.start_date)
+    const bulanObj = bulans.value.find(b => b.value === props.store?.range?.start_date)
     const namaBulan = bulanObj ? bulanObj.label : ''
-    const tahun = props.store.range.end_date || ''
+    const tahun = props.store?.range?.end_date || ''
     return `${namaBulan} ${tahun}`
 })
 const mapItems = computed(() => {
     const map = new Map()
-    const items = props.store.items
-    items.forEach(it => {
+    const items = props.store?.items
+    items?.forEach(it => {
         const key = it?.kode
         map.set(key, {
             kode: it?.kode,

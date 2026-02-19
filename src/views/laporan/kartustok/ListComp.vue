@@ -134,7 +134,7 @@ const handleCloseModalNota = () => {
 
 // saldo awal
 const saldoAwal = computed(() => {
-  // console.log('props.item', props.item);
+  console.log('props.item', props.item);
   return (props.item?.stok_awal ?? []).reduce((sum, it) => sum + Number(it.jumlah_k ?? 0), 0)
 })
 
