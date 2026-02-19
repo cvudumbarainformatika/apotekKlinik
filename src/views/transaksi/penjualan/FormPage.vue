@@ -526,6 +526,11 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
     formBayar.value.jumlah_bayar = newForm?.jumlah_bayar || 0
     formBayar.value.cara_bayar = newForm?.cara_bayar || 'TUNAI'
 
+    if (formBayar.value.diskon > 0) {
+      diskon.value = 'YA'
+    } else {
+      diskon.value = 'TIDAK'
+    }
     // console.log('🔥 watch form', form.value, newForm);
 
 
