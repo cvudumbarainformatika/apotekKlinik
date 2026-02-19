@@ -294,12 +294,19 @@
         </u-row>
         <u-separator v-if="store.mode === 'edit'" spacing="my-2"></u-separator>
 
-        <u-row v-if="store.mode === 'edit'" class="w-full">
-          <u-input v-model.number="formBayar.diskon" label="Diskon (%)" :error-message="errorMessage('diskon')" 
+        <div v-if="store.mode === 'edit'" class="grid grid-cols-3 gap-2 mb-2" role="radiogroup" aria-label="Diskon">
+          <div class="font-bold mr-2 text-sm" align="items-end">Pakai Diskon ? </div>
+          <u-radio v-model="diskon" value="YA" label="Ya" />
+          <u-radio v-model="diskon" value="TIDAK" label="Tidak" />
+        </div>
+        <u-row v-if="store.mode === 'edit' && diskon === 'YA'" class="w-full">
+          <u-input v-model.number="formBayar.diskon" readonly label="Diskon (%)" :error-message="errorMessage('diskon')" 
           :error="isError('diskon')"/>
         </u-row>
+        <u-separator v-if="store.mode === 'edit'" spacing="my-2"></u-separator>
         <!-- Radiogroup container -->
-        <div v-if="store.mode === 'edit'" class="grid grid-cols-2 gap-2 mb-2" role="radiogroup" aria-label="Cara Bayar">
+        <div v-if="store.mode === 'edit'" class="grid grid-cols-3 gap-2 mb-2" role="radiogroup" aria-label="Cara Bayar">
+          <div class="font-bold mr-2 text-sm" align="items-end">Cara Bayar ? </div>
           <u-radio v-model="formBayar.cara_bayar" value="TUNAI" label="TUNAI" />
           <u-radio v-model="formBayar.cara_bayar" value="TRANSFER" label="TRANSFER" />
         </div>
@@ -374,7 +381,7 @@ const menuBarangRef = ref(null)
 const inpJumlahRef = ref(null)
 const loadingLock = ref(false)
 const modalNota = ref(false)
-
+const diskon = ref('TIDAK')
 const jenis = computed(() => {
   return (form?.value?.kode_dokter !== null && form?.value?.kode_dokter !== '') ? 'resep' : 'umum'
 })
@@ -483,6 +490,14 @@ const formBayar = ref({
     diskon_rp: 0,
     jumlah_bayar: 0,
     cara_bayar: 'TUNAI'
+})
+
+watch(diskon, (val) => {
+  if (val === 'YA') {
+    formBayar.value.diskon = 10
+  } else {
+    formBayar.value.diskon = 0
+  }
 })
 
 watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
