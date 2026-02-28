@@ -192,11 +192,11 @@ function getStatusExpired(tgl) {
 
   // 1 - 30 hari
   if (diffDays >= 1 && diffDays <= 30) {
-    return 'Mendekati Exp'
+    return 'Mendekati Expired'
   }
 
   // > 30 hari
-  return ''
+  return 'Masih Aman'
 }
 const itemsWithStatus = computed(() =>
   store.items.map(i => ({
