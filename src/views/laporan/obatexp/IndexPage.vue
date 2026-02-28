@@ -22,15 +22,10 @@
           <u-btn-icon icon="print" tooltip="TPrint" v-print="printObj" />
         </u-row>
       </u-row>
-      <u-row right justify-self-end class="gap-2">
+      <!-- <u-row right justify-self-end class="gap-2">
         <u-date-range v-model="store.range" @update:modelValue="store.setRange" default-period="today" />
-        <!-- <order-by v-if="showOrder" 
-          :fields="store.orders"
-          v-model="store.order"
-          label="Urut By"
-          @update:model-value="onSortChange"
-        /> -->
-      </u-row>
+       
+      </u-row> -->
     </u-view>
 
 
@@ -85,6 +80,7 @@
           <thead class=" text-gray-700 text-sm uppercase">
             <tr>
               <th class="th text-left sticky-header">Tanggal Expired</th>
+              <th class="th text-left sticky-header">Status</th>
               <th class="th text-left sticky-header">Kode Obat</th>
               <th class="th text-left sticky-header">Nama Obat</th>
               <th class="th text-left sticky-header">Satuan</th>
@@ -94,9 +90,17 @@
             </tr>
           </thead>
           <tbody>
-            <template v-for="(item, i) in store.items" :key="i">
+            <template v-for="(item, i) in itemsWithStatus" :key="i">
               <tr class="border-b hover:bg-gray-50 transition">
                 <td class="td font-semibold">{{ formatDateIndo(item?.tgl_exprd) }}</td>
+                <td class="td font-semibold">
+                  <span :class="{
+                    'text-red-600 font-bold': item.status_exp === 'Sudah Expired',
+                    'text-orange-500 font-bold': item.status_exp === 'Mendekati Expired'
+                  }">
+                    {{ item.status_exp }}
+                  </span>
+                </td>
                 <td class="td font-semibold">{{ item?.kode }}</td>
                 <td class="td font-semibold">{{ item?.nama }}</td>
                 <td class="td font-semibold">1 {{ item?.satuan_b }} isi {{ item?.isi }} {{ item?.satuan_k }}</td>
@@ -116,8 +120,12 @@
     </u-view>
 
     <u-view>
-      <Pagination v-if="store?.meta" :total-items="store?.meta?.total" :per-page="store.params.per_page"
-        v-model:currentPage="store.params.page" />
+      <Pagination v-if="store?.meta" v-model:currentPage="store.params.page" :total-items="store?.meta?.total"
+        :per-page="store.params.per_page" @update:current-page="(val) => {
+          // console.log('page', val);
+          store.params.page = val
+          store.fetchData()
+        }" />
     </u-view>
 
 
@@ -164,6 +172,38 @@ const printObj = {
     console.log('closePrint')
   }
 }
+
+function getStatusExpired(tgl) {
+  if (!tgl) return ''
+
+  const today = new Date()
+  const expDate = new Date(tgl)
+
+  today.setHours(0, 0, 0, 0)
+  expDate.setHours(0, 0, 0, 0)
+
+  const diffDays =
+    (expDate - today) / (1000 * 60 * 60 * 24)
+
+  // <= tgl exp
+  if (diffDays <= 0) {
+    return 'Sudah Expired'
+  }
+
+  // 1 - 30 hari
+  if (diffDays >= 1 && diffDays <= 30) {
+    return 'Mendekati Exp'
+  }
+
+  // > 30 hari
+  return ''
+}
+const itemsWithStatus = computed(() =>
+  store.items.map(i => ({
+    ...i,
+    status_exp: getStatusExpired(i.tgl_exprd)
+  }))
+)
 </script>
 
 <style scoped>

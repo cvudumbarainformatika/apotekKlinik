@@ -2,18 +2,12 @@
   <div class="flex items-center justify-between p-3 w-full bg-secondary rounded-b-2xl">
     <!-- Mobile -->
     <div class="flex flex-1 justify-between sm:hidden">
-      <button
-        @click="goToPage(currentPage - 1)"
-        :disabled="currentPage === 1"
-        class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+      <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
+        class="relative inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
         Previous
       </button>
-      <button
-        @click="goToPage(currentPage + 1)"
-        :disabled="currentPage === totalPages"
-        class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
+      <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages"
+        class="relative ml-3 inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
         Next
       </button>
     </div>
@@ -31,64 +25,45 @@
         <nav class="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
 
           <!-- Tombol First -->
-          <button
-            @click="goToPage(1)"
-            :disabled="currentPage === 1"
+          <button @click="goToPage(1)" :disabled="currentPage === 1"
             class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed"
-            :class="currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-100 text-gray-700'"
-          >
+            :class="currentPage === 1 ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-100 text-gray-700'">
             « First
           </button>
 
 
-          <button
-            @click="goToPage(currentPage - 1)"
-            :disabled="currentPage === 1"
-            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"
+            class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="sr-only">Previous</span>
             <!-- <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" /> -->
             <u-icon name="chevron-left" class="w-5 h-5"></u-icon>
           </button>
 
           <template v-for="page in visiblePages" :key="page">
-            <button
-              v-if="page !== '...'"
-              @click="goToPage(page)"
-              :class="[
-                'relative inline-flex items-center px-4 py-2 text-sm font-semibold',
-                page === currentPage
-                  ? 'z-10 bg-light-primary text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-primary'
-                  : 'text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
-              ]"
-            >
+            <button v-if="page !== '...'" @click="goToPage(page)" :class="[
+              'relative inline-flex items-center px-4 py-2 text-sm font-semibold',
+              page === currentPage
+                ? 'z-10 bg-light-primary text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-light-primary'
+                : 'text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+            ]">
               {{ page }}
             </button>
-            <span
-              v-else
-              class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400"
-            >
+            <span v-else class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-400">
               ...
             </span>
           </template>
 
-          <button
-            @click="goToPage(currentPage + 1)"
-            :disabled="currentPage === totalPages"
-            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
+          <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages"
+            class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="sr-only">Next</span>
             <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
           </button>
 
 
-           <!-- Tombol Last -->
-          <button
-            @click="goToPage(totalPages)"
-            :disabled="currentPage === totalPages"
+          <!-- Tombol Last -->
+          <button @click="goToPage(totalPages)" :disabled="currentPage === totalPages"
             class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 disabled:opacity-50 disabled:cursor-not-allowed"
-            :class="currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-100 text-gray-700'"
-          >
+            :class="currentPage === totalPages ? 'bg-gray-100 text-gray-400 cursor-not-allowed' : 'bg-white hover:bg-gray-100 text-gray-700'">
             Last »
           </button>
         </nav>
