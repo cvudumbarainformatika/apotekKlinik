@@ -81,7 +81,8 @@
             <tr>
               <th class="th text-left sticky-header">Tanggal Expired</th>
               <th class="th text-left sticky-header">Status</th>
-              <th class="th text-left sticky-header">Kode Obat</th>
+              <th class="th text-left sticky-header">No Penerimaan</th>
+              <th class="th text-left sticky-header">PBF</th>
               <th class="th text-left sticky-header">Nama Obat</th>
               <th class="th text-left sticky-header">Satuan</th>
               <th class="th text-right sticky-header">Jumlah</th>
@@ -101,8 +102,9 @@
                     {{ item.status_exp }}
                   </span>
                 </td>
-                <td class="td font-semibold">{{ item?.kode }}</td>
-                <td class="td font-semibold">{{ item?.nama }}</td>
+                <td class="td font-semibold">{{ item?.nopenerimaan }}</td>
+                <td class="td font-semibold">{{ item?.nama_supplier }}</td>
+                <td class="td font-semibold">{{ item?.kode }} - {{ item?.nama }}</td>
                 <td class="td font-semibold">1 {{ item?.satuan_b }} isi {{ item?.isi }} {{ item?.satuan_k }}</td>
                 <td class="td text-right font-semibold ">
                   {{ formatRupiah(item?.jumlah_k) }} {{ item?.satuan_k }}
@@ -204,6 +206,7 @@ const itemsWithStatus = computed(() =>
     status_exp: getStatusExpired(i.tgl_exprd)
   }))
 )
+
 </script>
 
 <style scoped>
