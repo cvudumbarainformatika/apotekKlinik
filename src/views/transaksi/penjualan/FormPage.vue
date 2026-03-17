@@ -300,8 +300,15 @@
           <u-radio v-model="diskon" value="TIDAK" label="Tidak" />
         </div>
         <u-row v-if="store.mode === 'edit' && diskon === 'YA'" class="w-full">
-          <u-input v-model.number="formBayar.diskon" readonly label="Diskon (%)" :error-message="errorMessage('diskon')" 
-          :error="isError('diskon')"/>
+          <!-- <u-input v-model.number="formBayar.diskon" readonly label="Diskon (%)" :error-message="errorMessage('diskon')" 
+          :error="isError('diskon')"/> -->
+          <u-select v-model="formBayar.diskon" :options="[
+            { label: '5%', value: 5 },
+            { label: '8%', value: 8 },
+            { label: '10%', value: 10 }
+          ]" item-label="label" item-value="value" label="Pilih Diskon (%)"
+            :error="isError('diskon')"
+            :error-message="errorMessage('diskon')" />
         </u-row>
         <u-separator v-if="store.mode === 'edit'" spacing="my-2"></u-separator>
         <!-- Radiogroup container -->
@@ -492,11 +499,23 @@ const formBayar = ref({
     cara_bayar: 'TUNAI'
 })
 
+const isInit = ref(true)
 watch(diskon, (val) => {
-  if (val === 'YA') {
-    formBayar.value.diskon = 10
-  } else {
+  // if (val === 'YA') {
+  //   formBayar.value.diskon = 10
+  // } else {
+  //   formBayar.value.diskon = 0
+  // }
+  if (isInit.value) return
+
+  if (val === 'TIDAK') {
     formBayar.value.diskon = 0
+  }
+})
+
+watch(() => formBayar.value.diskon, (val) => {
+  if (val && errorLocal.value?.diskon) {
+    delete errorLocal.value.diskon
   }
 })
 
@@ -521,9 +540,9 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
       form.value.nopenjualan = null
     }
 
-    formBayar.value.diskon = newForm?.diskon || 0
-    formBayar.value.diskon_rp = newForm?.diskon_rp || 0
-    formBayar.value.jumlah_bayar = newForm?.jumlah_bayar || 0
+    formBayar.value.diskon = Number(newForm?.diskon ?? 0)
+    formBayar.value.diskon_rp = Number(newForm?.diskon_rp ?? 0)
+    formBayar.value.jumlah_bayar = Number(newForm?.jumlah_bayar ?? 0)
     formBayar.value.cara_bayar = newForm?.cara_bayar || 'TUNAI'
 
     if (formBayar.value.diskon > 0) {
@@ -532,7 +551,9 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
       diskon.value = 'TIDAK'
     }
     // console.log('🔥 watch form', form.value, newForm);
-
+    nextTick(() => {
+      isInit.value = false
+    })
 
   }
 
@@ -546,13 +567,15 @@ const error = computed(() => {
   }
   return null
 })
-
+const errorLocal = ref({})
 function isError(field){
-  return !!error.value?.[field]
+  return !!(errorLocal.value?.[field] || error.value?.[field])
 }
 
 function errorMessage(field){
-  return error.value?.[field]?.[0] ?? null
+  return errorLocal.value?.[field]?.[0]
+    ?? error.value?.[field]?.[0]
+    ?? null
 } 
 
 
@@ -745,6 +768,16 @@ const clearSelectedBarang = () => {
 const simpanPenjualan = async (e) => {
   e.preventDefault()
   e.stopPropagation()
+
+  if (errorLocal.value?.diskon) {
+    delete errorLocal.value.diskon
+  }
+
+  // validasi
+  if (diskon.value === 'YA' && !formBayar.value.diskon) {
+    errorLocal.value.diskon = ['Diskon wajib dipilih']
+    return
+  }
   // console.log('store', props.store.items);
 
   const payload = {
