@@ -97,7 +97,7 @@
             <tr class="bg-gray-100 font-semibold">
               <td class="px-4 py-2">Penjualan Bersih</td>
               <td class="px-4 py-2 text-right"></td>
-              <td class="px-4 py-2 text-right font-bold">Rp. {{ formatRupiah(store?.items?.totalPenjualan) || 0 }}</td>
+              <td class="px-4 py-2 text-right font-bold">Rp. {{ formatRupiah(store?.items?.penjualanBersih) || 0 }}</td>
             </tr>
 
             <!-- Harga Pokok Penjualan -->
