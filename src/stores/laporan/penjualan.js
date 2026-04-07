@@ -25,7 +25,7 @@ export const useLaporanPenjualanStore = defineStore('laporan-penjualan-store', {
       end_date: getToday()
     },
 
-    perPages: [50, 100, 200, 500],
+    perPages: [50, 100, 200, 500, 1000, 5000],
     
   }),
 
