@@ -45,6 +45,10 @@
             <u-input type="number" v-model="form.harga_jual_biasa_k" label="Harga Jual Biasa"
               :error="isError('harga_jual_biasa_k')" :error-message="errorMessage('harga_jual_biasa_k')" />
           </u-row>
+          <u-row>
+            <u-input type="number" v-model="form.harga_jual_bpjs" label="Harga Jual BPJS"
+              :error="isError('harga_jual_bpjs')" :error-message="errorMessage('harga_jual_bpjs')" />
+          </u-row>
           <!-- <u-row>
             <u-input type="number" v-model="form.persen_resep" label="Margin Resep (%)" :error="isError('persen_resep')"
               :error-message="errorMessage('persen_resep')" />
@@ -99,6 +103,7 @@ const form = ref({
   kode_kategori: '',
   harga_jual_resep_k: '',
   harga_jual_biasa_k: '',
+  harga_jual_bpjs: '',
   persen_resep: '',
   persen_biasa: ''
 })

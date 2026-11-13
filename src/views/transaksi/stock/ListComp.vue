@@ -80,6 +80,9 @@
                 <u-row class="col-span-2">
                   <span class="font-small">Harga Umum : {{ formatRpkoma(item?.barang?.harga_jual_biasa_k) }}</span>
                 </u-row>
+                <u-row class="col-span-2">
+                  <span class="font-small">Harga BPJS : {{ formatRpkoma(item?.barang?.harga_jual_bpjs) }}</span>
+                </u-row>
               </u-grid>
             </div>
 

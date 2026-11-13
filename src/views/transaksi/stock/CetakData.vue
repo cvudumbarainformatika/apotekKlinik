@@ -27,6 +27,7 @@
                     <td class="td text-left p-1 font-bold">Satuan</td>
                     <td class="td text-right p-1 font-bold">Harga Resep</td>
                     <td class="td text-right p-1 font-bold">Harga Umum</td>
+                    <td class="td text-right p-1 font-bold">Harga BPJS</td>
                     <!-- <td class="td text-left p-1 font-bold">Tgl Expired</td> -->
                     <td class="td text-right p-1 font-bold">Stok</td>
                 </tr>
@@ -46,6 +47,9 @@
                         </td>
                         <td class="td p-1 align-top text-right"> {{
                             formatRpkoma(it?.barang?.harga_jual_biasa_k) }}
+                        </td>
+                        <td class="td p-1 align-top text-right"> {{
+                            formatRpkoma(it?.barang?.harga_jual_bpjs) }}
                         </td>
                         <!-- <td class="td p-1 align-top text-left"> {{ formatDateIndo(it?.tgl_exprd) }} </td> -->
                         <td class="td p-1 align-top text-right font-semibold"> {{ formatRupiah(it?.jumlah_k) }} {{

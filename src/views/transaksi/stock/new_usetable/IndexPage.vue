@@ -120,6 +120,7 @@
               <th class="th text-right sticky-header">SATUAN</th>
               <th class="th text-right sticky-header">HARGA RESEP</th>
               <th class="th text-right sticky-header">HARGA UMUM</th>
+              <th class="th text-right sticky-header">HARGA BPJS</th>
               <th class="th text-right sticky-header">STOK</th>
               <th class="th text-right sticky-header">PENYESUAIAN</th>
             </tr>
@@ -135,7 +136,8 @@
                 <td class="">{{ item?.barang?.nama }}</td>
                 <td class="text-right">1 {{ item?.satuan_b }} isi {{ item?.isi }} {{ item?.satuan_k }}</td>
                 <td class="text-right">{{ formatRpkoma(item?.barang?.harga_jual_resep_k) }}</td>
-                <td class="text-right">{{ formatRupiah(item?.barang?.harga_jual_biasa_k) }}</td>
+                <td class="text-right">{{ formatRpkoma(item?.barang?.harga_jual_biasa_k) }}</td>
+                <td class="text-right">{{ formatRpkoma(item?.barang?.harga_jual_bpjs) }}</td>
                 <td class="text-right">{{ formatRupiah(item?.jumlah_k) }} {{ item?.satuan_k }}</td>
                 <td class="text-right">
                   <u-row class="col-span-12 justify-self-end pt-2 pb-2">

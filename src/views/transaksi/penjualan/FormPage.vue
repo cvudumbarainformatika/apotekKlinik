@@ -27,6 +27,14 @@
           </div>
         </u-row>
         <u-row>
+          <label for="pakai-harga-bpjs"
+            :class="['flex w-full items-center justify-center gap-2 rounded-lg border border-light-primary px-4 py-2 text-sm font-medium text-center select-none transition-colors', pakaiHargaBpjs ? 'bg-grady-primary text-background' : 'bg-secondary text-primary font-semibold', adaItemPenjualan ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer']">
+            <input id="pakai-harga-bpjs" v-model="pakaiHargaBpjs" type="checkbox"
+              :disabled="adaItemPenjualan" class="h-4 w-4 accent-primary" />
+            <span>BPJS</span>
+          </label>
+        </u-row>
+        <u-row>
           <!-- <div 
             class="bg-primary/10 border border-primary rounded-xl shadow-sm p-2 transition-all duration-300 hover:shadow-md w-full">
             <div class="flex flex-1 justify-center items-center">
@@ -39,11 +47,11 @@
             class="inline-flex rounded-lg overflow-hidden border border-light-primary bg-grady-primary w-full justify-center">
             <u-grid cols="2" gap="gap-0">
               <label
-                :class="['text-sm w-full font-medium text-center px-4 py-2 select-none transition-colors', jenis === 'umum' ? 'bg-grady-primary text-background ' : 'bg-secondary text-primary font-semibold shadow']">
+                :class="['text-sm w-full font-medium text-center px-4 py-2 select-none transition-colors', !pakaiHargaBpjs && jenis === 'umum' ? 'bg-grady-primary text-background' : 'bg-secondary text-primary font-semibold']">
                 Umum
               </label>
               <label
-                :class="['text-sm w-full font-medium text-center px-2 py-2 select-none transition-colors', jenis === 'resep' ? 'bg-grady-primary text-background ' : 'bg-secondary text-primary font-semibold shadow']">
+                :class="['text-sm w-full font-medium text-center px-2 py-2 select-none transition-colors', !pakaiHargaBpjs && jenis === 'resep' ? 'bg-grady-primary text-background' : 'bg-secondary text-primary font-semibold']">
                 Resep
               </label>
             </u-grid>
@@ -73,7 +81,14 @@
             :debounce="300" :min-search-length="2" item-key="id" item-label="nama"
             not-found-text="Data Pelanggan tidak ditemukan" not-found-subtext="Coba kata kunci lain"
             :show-add-button="false" api-url="/api/v1/master/pelanggan/get-list" api-response-path="data.data"
-            :api-params="{ per_page: 5 }" :use-api="true" @select="handleSelectedPelanggan"></u-autocomplete>
+            :api-params="pelangganApiParams" :use-api="true" @select="handleSelectedPelanggan">
+            <template #item="{ item }">
+              <div class="flex flex-col gap-1">
+                <span class="font-medium">{{ item?.nama }}</span>
+                <span class="text-xs text-gray-500">No. BPJS: {{ item?.no_bpjs || 'Belum terdaftar' }}</span>
+              </div>
+            </template>
+          </u-autocomplete>
         </u-row>
         <u-row>
           <div v-if="store?.pelangganSelected"
@@ -81,9 +96,10 @@
             <div class="flex flex-1 justify-between items-start">
               <u-row flex1 class="w-full">
                 <u-icon name="UserSearch" class="w-5 h-5 text-primary" />
-                <u-text>
-                  {{ store.pelangganSelected?.nama }}
-                </u-text>
+                <u-col gap="gap-0">
+                  <u-text>{{ store.pelangganSelected?.nama }}</u-text>
+                  <u-text size="sm">No. BPJS: {{ store.pelangganSelected?.no_bpjs || 'Belum terdaftar' }}</u-text>
+                </u-col>
               </u-row>
               <button @click="clearSelectedPelanggan" class="text-primary hover:text-danger " aria-label="Hapus">
                 <u-icon name="X" class="w-4 h-4" />
@@ -231,7 +247,7 @@
                     <div class="flex flex-col">
                       <div class="text-right">
                         <div>
-                          <div class="text-xs">Harga : <b class="font-bold text-sm">Rp. {{ formatRupiah(getHargaJual())
+                          <div class="text-xs">{{ pakaiHargaBpjs ? 'Harga BPJS' : 'Harga' }} : <b class="font-bold text-sm">Rp. {{ formatRupiah(getHargaJual())
                               }} </b></div>
                         </div>
                         <div>
@@ -389,6 +405,18 @@ const inpJumlahRef = ref(null)
 const loadingLock = ref(false)
 const modalNota = ref(false)
 const diskon = ref('TIDAK')
+const pakaiHargaBpjs = ref(false)
+const adaItemPenjualan = computed(() => (props.store.form?.rinci?.length ?? 0) > 0)
+const pelangganApiParams = computed(() => ({
+  per_page: 5,
+  ...(pakaiHargaBpjs.value ? { bpjs_only: 1 } : {})
+}))
+watch(pakaiHargaBpjs, (aktif) => {
+  searchPelanggan.value = ''
+  if (aktif && props.store.pelangganSelected && !props.store.pelangganSelected.no_bpjs) {
+    clearSelectedPelanggan()
+  }
+})
 const jenis = computed(() => {
   return (form?.value?.kode_dokter !== null && form?.value?.kode_dokter !== '') ? 'resep' : 'umum'
 })
@@ -432,7 +460,8 @@ const form = ref({
   nobatch: null,
   tgl_exprd: null,
   id_stok: null,
-  hpp: ''
+  hpp: '',
+  pakai_harga_bpjs: 0
 
 })
 
@@ -540,6 +569,7 @@ watch(() => ({ ...props.store.form }), (newForm, oldForm) => {
       form.value.nopenjualan = null
     }
 
+    pakaiHargaBpjs.value = props.store.mode === 'edit' ? Boolean(newForm?.pakai_harga_bpjs) : false
     formBayar.value.diskon = Number(newForm?.diskon ?? 0)
     formBayar.value.diskon_rp = Number(newForm?.diskon_rp ?? 0)
     formBayar.value.jumlah_bayar = Number(newForm?.jumlah_bayar ?? 0)
@@ -633,12 +663,26 @@ const groupedItems = computed(() => {
 })
 
 
+const validasiBpjs = () => {
+  if (!pakaiHargaBpjs.value) return true
+  if (!props.store.pelangganSelected?.no_bpjs) {
+    notify({ message: 'Pilih pelanggan yang memiliki nomor BPJS.', type: 'error' })
+    return false
+  }
+  if (!form.value.kode_dokter) {
+    notify({ message: 'Pilih dokter untuk penjualan BPJS.', type: 'error' })
+    return false
+  }
+  return true
+}
+
 const handleOk = () => {
   // console.log('handleOk');
   clearSelectedBarang()
   
 }
 const handleAdd = async(item) => {
+  if (!validasiBpjs()) return
   // console.log('handleAdd', item);
   // console.log('handleAdd', props.store.barangSelected);
 
@@ -649,7 +693,12 @@ const handleAdd = async(item) => {
   form.value.satuan_k = item?.satuan_k ?? null
   form.value.satuan_b = item?.satuan_b ?? null
   form.value.isi = parseInt(item?.isi ?? 1)
-  form.value.harga_jual = getHargaJual()
+  const hargaJual = getHargaJual()
+  if (pakaiHargaBpjs.value && hargaJual <= 0) {
+    return notify({ message: 'Harga BPJS barang ini belum diatur.', type: 'error' })
+  }
+  form.value.harga_jual = hargaJual
+  form.value.pakai_harga_bpjs = pakaiHargaBpjs.value ? 1 : 0
   form.value.harga_beli = parseInt(item?.harga_total ?? 0)
   form.value.id_penerimaan_rinci = parseInt(item?.id_penerimaan_rinci)
   form.value.nopenerimaan = item?.nopenerimaan ?? null
@@ -668,6 +717,7 @@ const handleAdd = async(item) => {
 
 function getHargaJual() {
   const selected = props?.store?.barangSelected ?? null
+  if (pakaiHargaBpjs.value) return parseInt(selected?.harga_jual_bpjs ?? 0)
   // const resep = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_resep ?? 0) / 100)
   // const biasa = parseFloat(selected?.hpp ?? 0) + (parseFloat(selected?.hpp ?? 0) * parseInt(selected?.persen_biasa ?? 0) / 100)
   // return form.value.kode_dokter ? Math.ceil(resep) : Math.ceil(biasa)
@@ -676,6 +726,9 @@ function getHargaJual() {
 }
 
 const handleSelectedPelanggan = (item) => {
+  if (pakaiHargaBpjs.value && !item?.no_bpjs) {
+    return notify({ message: 'Pilih pelanggan yang memiliki nomor BPJS.', type: 'error' })
+  }
   // console.log('pelanggan', item);
 
   
@@ -748,6 +801,7 @@ function handleClickOutside(event) {
 
 const clearSelectedPelanggan = () => {
   props.store.pelangganSelected = null
+  form.value.kode_pelanggan = ''
   // form.value.kode_supplier = ''
 }
 const clearSelectedDokter = () => {
@@ -766,6 +820,7 @@ const clearSelectedBarang = () => {
 
 
 const simpanPenjualan = async (e) => {
+  if (!validasiBpjs()) return
   e.preventDefault()
   e.stopPropagation()
 
@@ -844,6 +899,7 @@ onMounted(() => {
 function initForm(){
   const today = new Date().toISOString().split('T')[0];
   form.value.tgl_penjualan = null
+  pakaiHargaBpjs.value = false
   form.value.tgl_order = today
   form.value.nomor_order = ''
   props.store.init()

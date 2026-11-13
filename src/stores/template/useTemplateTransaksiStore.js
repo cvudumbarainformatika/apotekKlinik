@@ -200,6 +200,12 @@ export function createTemplateTransaksiStore(storeId, config) {
           this.items[index] = result
         }
         this.supplierSelected = result?.supplier ?? result?.suplier ?? null
+        if (result && Object.prototype.hasOwnProperty.call(result, 'pelanggan')) {
+          this.pelangganSelected = result.pelanggan
+        }
+        if (result && Object.prototype.hasOwnProperty.call(result, 'dokter')) {
+          this.dokterSelected = result.dokter
+        }
         this.maxRight = false
         this.mode = 'edit'
       },

@@ -23,6 +23,10 @@
           </u-row> -->
         </u-row>
         <u-row flex1 class="w-full">
+          <u-input v-model="form.no_bpjs" label="Nomor BPJS" maxlength="50"
+            :error="isError('no_bpjs')" :error-message="errorMessage('no_bpjs')" />
+        </u-row>
+        <u-row flex1 class="w-full">
           <u-textarea
             v-model="form.alamat"
             label="alamat"
@@ -63,6 +67,7 @@ const form = ref({
   nama: '',
   tlp: '',
   alamat: '',
+  no_bpjs: '',
 })
 
 function isError(field){

@@ -22,6 +22,10 @@
                 <div class="font-bold">{{ item?.rekening }}</div> -->
                 
               </u-row>
+              <u-row flex1 class="w-full text-xs" v-if="item?.no_bpjs">
+                <div>No. BPJS : </div>
+                <div class="font-bold">{{ item?.no_bpjs }}</div>
+              </u-row>
               <u-row flex1 class="w-full text-xs">
                 <div>Alamat : </div>
                 <div class="font-light">{{ item?.alamat }}</div>
